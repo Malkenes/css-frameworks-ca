@@ -31,14 +31,16 @@
                     </div>
                     <div class="tab-content">
                         <div id="signinForm" class="tab-pane fade show active" role="tabpanel" tabindex="0">
-                            <form action="/profile/index.html">
+                            <form class="needs-validation" novalidate>
                                 <div class="mb-3">
                                     <label for="signinEmail" class="form-label">Email</label>
-                                    <input type="email" class="form-control" id="signinEmail" required>
+                                    <input type="email" class="form-control" id="signinEmail" name="email" required>
+                                    <div class="invalid-feedback">Email needs to be @noroff.no or @stud.noroff.no</div>
                                 </div>
                                 <div class="mb-3">
                                     <label for="signinPassword" class="form-label">Password</label>
-                                    <input type="password" class="form-control" id="signinPassword"  minlength="8" maxlength="20" required>
+                                    <input type="password" class="form-control" id="signinPassword" name="password"  minlength="8" required>
+                                    <div class="invalid-feedback">Password needs to be atleast 8 characters</div>
                                 </div>
                                 <div class="d-grid mb-3">
                                     <button class="btn btn-primary">Sign in</button>
@@ -46,24 +48,35 @@
                             </form>
                         </div>
                         <div id="registerForm" class="tab-pane fade" role="tabpanel" tabindex="0">
-                            <form action="/profile/index.html">
+                            <form class="needs-validation" novalidate>
+                                <div class="mb-3">
+                                    <label for="registerName" class="form-label">Username</label>
+                                    <input type="text" class="form-control" id="registerName" name="name">
+                                    <div class="invalid-feedback">Username can not contain punctuation symbols apart from (_)</div>
+                                </div>
                                 <div class="mb-3">
                                     <label for="registerEmail" class="form-label">Email</label>
-                                    <input type="email" class="form-control" id="registerEmail" required>
+                                    <input type="email" class="form-control" id="registerEmail" name="email" required>
+                                    <div class="invalid-feedback">Email needs to be @noroff.no or @stud.noroff.no</div>
                                 </div>
                                 <div class="mb-3">
                                     <label for="registerPassword" class="form-label">Password</label>
-                                    <input type="password" class="form-control" id="registerPassword"  minlength="8" maxlength="20" required>
+                                    <input type="password" class="form-control" id="registerPassword" name="password"  minlength="8" required>
+                                    <div class="invalid-feedback">Password needs to be atleast 8 characters</div>
                                 </div>
                                 <div class="mb-3">
                                     <label for="registerPasswordRepeat" class="form-label">Repeat Password</label>
-                                    <input type="password" class="form-control" id="registerPasswordRepeat" minlength="8" maxlength="20" required>
+                                    <input type="password" class="form-control" id="registerPasswordRepeat" name="password" minlength="8" required>
+                                    <div class="invalid-feedback">Password does not match</div>
                                 </div>
                                 <div class="d-grid mb-3">
                                     <button class="btn btn-primary">Continue</button>
                                 </div>
                             </form>
                         </div>
+                    </div>
+                    <div class="mb-3">
+                        <div id="auth-error" class="invalid-feedback">Something went wrong!</div>
                     </div>
                     <div class="d-grid mb-3">
                         <button class="btn btn-outline-primary">Forgot Password?</button>
@@ -73,5 +86,6 @@
         </div>
     </main>
     <script src="../node_modules/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script type="module" src="js/index.js"></script>
 </body>
 </html>
