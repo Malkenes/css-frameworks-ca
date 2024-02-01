@@ -1,12 +1,40 @@
 const NOROFF_API_URL = "https://v2.api.noroff.dev";
 
 /**
+ *Initializes form validation and submission logic for a collection of forms.
+ * @param {NodeList} forms 
+ */
+export function initializeFormValidation(forms) {
+    Array.from(forms).forEach(form => {
+        const inputs = form.querySelectorAll("input");
+        Array.from(inputs).forEach(input => {
+            input.addEventListener("focusout", () => {
+                if (input.value.length > 0) {
+                    if(inputValidation(input)) {
+                        input.classList.add("is-valid");
+                    } else {
+                        input.classList.add("is-invalid");
+                    }
+                };
+            });
+            input.addEventListener("focusin", () => {
+                input.classList.remove("is-valid", "is-invalid");
+            })
+        })
+        form.addEventListener("submit", event => {
+            event.preventDefault();
+            
+            loginFormValidation(form);
+        })
+    })    
+}
+/**
  * Handles user authentication by sending a POST request to the specified API endpoint
  * @param {object} data 
  * @param {string} data.email
  * @param {string} data.password
  */
-export async function signIn(data) {
+async function signIn(data) {
     try {
         const response = await fetch(`${NOROFF_API_URL}/auth/login`, {
         method: "POST",
@@ -65,11 +93,11 @@ async function registerUser(data) {
  *Validates the input fields in a given form and performs user authentication or registration based on the form data.
  * @param {HTMLFormElement} form 
  */
-export function loginFormValidation(form) {
+function loginFormValidation(form) {
     const dataObject = {}
-    const inputInForms = form.querySelectorAll("input");
+    const inputs = form.querySelectorAll("input");
 
-    Array.from(inputInForms).forEach(input => {
+    Array.from(inputs).forEach(input => {
         if(inputValidation(input)) {
             const key = input.name;
             dataObject[key] = input.value;
@@ -90,7 +118,7 @@ export function loginFormValidation(form) {
  * @param {HTMLInputElement} input 
  * @returns {boolean}
  */
-export function inputValidation(input) {
+function inputValidation(input) {
     if (input.type === "text") {
         return (userNameValidation(input.value));
     }

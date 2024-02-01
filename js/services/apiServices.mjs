@@ -1,6 +1,11 @@
 const NOROFF_API_URL = "https://v2.api.noroff.dev";
-
-export async function getApiKey(token) {
+const accessToken = localStorage.getItem("accessToken");
+/**
+ *Requests and retrieves an API key for a user with the provided authentication token.
+ * @param {string} token 
+ * @returns {Promise<string>}
+ */
+async function getApiKey(token) {
     try {
         const response = await fetch(`${NOROFF_API_URL}/auth/create-api-key`, {
             method: "POST",
@@ -19,10 +24,20 @@ export async function getApiKey(token) {
         console.log(error);
     }
 }
-
-export async function apiCall(options) {
+/**
+ *Makes an authenticated API call to a specified endpoint using the provided access token.
+ * @param {string} endpoint 
+ */
+export async function apiCall(endpoint) {
+    const apiKey = await getApiKey(accessToken);
+    const options = {
+        headers: {
+            Authorization: `Bearer ${accessToken}`,
+            "X-Noroff-API-Key": apiKey
+        }
+    }    
     try {
-        const response = await fetch(`${NOROFF_API_URL}/social/profiles`, options)
+        const response = await fetch(`${NOROFF_API_URL}${endpoint}`, options)
         const result = await response.json();
         console.log(result);
     } catch (error) {
