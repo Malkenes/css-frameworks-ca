@@ -1,5 +1,11 @@
 const NOROFF_API_URL = "https://v2.api.noroff.dev";
 
+/**
+ * Handles user authentication by sending a POST request to the specified API endpoint
+ * @param {object} data 
+ * @param {string} data.email
+ * @param {string} data.password
+ */
 export async function signIn(data) {
     try {
         const response = await fetch(`${NOROFF_API_URL}/auth/login`, {
@@ -27,6 +33,14 @@ export async function signIn(data) {
         console.log(error);
     }
 }
+
+/**
+ *Registers a new user by sending a POST request to the specified API endpoint.
+ * @param {Object} data 
+ * @param {string} data.name
+ * @param {string} data.email
+ * @param {string} data.password
+ */
 async function registerUser(data) {
     try {
         const response = await fetch(`${NOROFF_API_URL}/auth/register`, {
@@ -47,7 +61,10 @@ async function registerUser(data) {
         console.log(error);
     }
 }
-
+/**
+ *Validates the input fields in a given form and performs user authentication or registration based on the form data.
+ * @param {HTMLFormElement} form 
+ */
 export function loginFormValidation(form) {
     const dataObject = {}
     const inputInForms = form.querySelectorAll("input");
@@ -68,7 +85,11 @@ export function loginFormValidation(form) {
         }
     }
 }
-
+/**
+ *Validates the value of an input element based on its type.
+ * @param {HTMLInputElement} input 
+ * @returns {boolean}
+ */
 export function inputValidation(input) {
     if (input.type === "text") {
         return (userNameValidation(input.value));
