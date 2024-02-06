@@ -39,7 +39,7 @@ export async function apiCall(endpoint) {
     try {
         const response = await fetch(`${NOROFF_API_URL}${endpoint}`, options)
         const result = await response.json();
-        console.log(result);
+        return result;
     } catch (error) {
         
     }

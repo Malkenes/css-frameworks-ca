@@ -25,7 +25,7 @@
                     <input type="search" class="form-control ps-5" placeholder="Search" aria-label="search field">
                 </form>
                 <a href="../profile/index.html">
-                    <img src="../images/logo.png" class="user-icon align-item-end" alt="profile">
+                    <img src="../images/logo.png" class="user-icon align-item-end user-profile" alt="profile">
                 </a>    
             </div>
         </nav>
@@ -57,7 +57,7 @@
                 </div>
                 <div class="col-lg-7">
                     <form class="col d-flex align-items-stretch rounded-pill mb-3">
-                        <div class="user-icon-lg position-absolute"></div>
+                        <img class="user-icon-lg position-absolute user-profile">
                         <textarea class="form-control rounded-start-pill ps-6" style="height: 96px;" placeholder="Whats on your mind?" aria-label="create a post"></textarea>
                         <div class="d-grid">
                             <button class="btn btn-primary rounded-end-pill">Post</button>
@@ -77,7 +77,8 @@
                             <button class="nav-link"><i class="fas fa-arrow-up"></i> Popular</button>
                         </li>
                     </ul>
-                    <div class="mb-3">
+                    <div class="mb-3" id="feed">
+                        <!--
                         <div class="container bg-white p-3 mb-3">
                             <div class="border-bottom">
                                 <div class="d-flex gap-2 align-items-center">
@@ -263,12 +264,13 @@
                                     </div>    
                                 </div>
                             </div>
-                        </div>
+                        </div>-->
                     </div>
                 </div>
             </div>
         </div>
     </main>
     <script src="../node_modules/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script type="module" src="../js/index.js"></script>
 </body>
 </html>

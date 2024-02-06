@@ -56,6 +56,7 @@ async function signIn(data) {
 
         const result = await response.json();
         localStorage.setItem("accessToken", result.data.accessToken);
+        localStorage.setItem("name", result.data.name);
 
     } catch (error) {
         console.log(error);
