@@ -56,13 +56,48 @@
                     </ul>
                 </div>
                 <div class="col-lg-7">
-                    <form class="col d-flex align-items-stretch rounded-pill mb-3">
-                        <img class="user-icon-lg position-absolute user-profile">
-                        <textarea class="form-control rounded-start-pill ps-6" style="height: 96px;" placeholder="Whats on your mind?" aria-label="create a post"></textarea>
-                        <div class="d-grid">
-                            <button class="btn btn-primary rounded-end-pill">Post</button>
+                    <div class="d-grid">
+                        <button class="mb-3 bg-white rounded-start-pill d-flex p-0 border border-0 align-items-center" id="create-post">
+                            <img class="user-icon-lg user-profile">
+                            <span>Whats on your mind?</span>
+                        </button>
+                        <div>
+                            <form class="col align-items-stretch mb-3 p-3 bg-white d-none" id="post-form">
+                                <div class="mb-3 d-flex align-items-center gap-2">
+                                    <img class="user-icon user-profile">
+                                    <input class="form-control" placeholder="Title" aria-label="create a post" id="title-input" required></input>
+                                    <button type="button" class="btn-close" id="close-postform" aria-label="close"></button>
+                                </div>
+                                <div class="mb-3">
+                                    <textarea class="form-control" rows="10" id="body-input"></textarea>
+                                </div>
+                                <div class="mb-3">
+                                    <button type="button" class="btn" id="media-toggle">
+                                        <i class="fas fa-image" id="media-image"></i>
+                                        <i class="fas fa-x d-none" id="media-close"></i>
+                                    </button>
+                                    <div class="add-media d-none">
+                                        <label for="media-url-input">Media url</label>
+                                        <input type="url" class="form-control" id="media-url-input">
+                                        <div class="text-center">
+                                            <img class="img-fluid" id="placeholder-image">
+                                        </div>
+                                        <label for="media-alt-input">Alt text</label>
+                                        <input type="text" class="form-control" id="media-alt-input">
+                                    </div>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="tags-input" class="form-label">Tags</label>
+                                    <input type="text" id="tags-input">
+                                    <button type="button" class="btn btn-secondary" id="add-tag">add</button>
+                                    <div class="d-flex flex-wrap gap-2" id="added-tags"></div>
+                                </div>
+                                <div class="d-grid mb-3">
+                                    <button class="btn btn-primary">Post</button>
+                                </div>
+                            </form>
                         </div>
-                    </form>
+                    </div>
                     <ul class="nav nav-underline mb-3 p-2 bg-white">
                         <li class="d-lg-none nav-item">
                             <button class="nav-link" data-bs-toggle="offcanvas" data-bs-target="#offcanvasResponsive"><i class="fas fa-filter"></i> Filter</button>

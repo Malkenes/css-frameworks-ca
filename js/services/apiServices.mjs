@@ -44,3 +44,18 @@ export async function apiCall(endpoint) {
         
     }
 }
+
+export async function postApiData(endpoint, data = {}) {
+    const apiKey = await getApiKey(accessToken);
+    const options = {
+        method: "post",
+        headers: {
+            "Content-Type" : "application/json",
+            Authorization: `Bearer ${accessToken}`,
+            "X-Noroff-API-Key": apiKey
+        },
+        body: JSON.stringify(data)
+    }
+    const response = await fetch (`${NOROFF_API_URL}${endpoint}`, options)
+    return response.json();
+}

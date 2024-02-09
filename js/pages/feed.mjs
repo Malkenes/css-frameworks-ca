@@ -1,8 +1,22 @@
 export function displayFeed(data) {
     const feed = document.querySelector("#feed");
     data.data.forEach(element => {
-        feed.append(displayPost(element));
+        //feed.append(displayPost(element));
+        const post = displayPost(element);
+        feed.append(post)
+        const bodyText = post.querySelector(".content");
+        const bodyShowMore = post.querySelector(".show-more");
+        //console.log(bodyText.clientHeight);
+        //console.log(bodyText.scrollHeight);
+        if (bodyText.clientHeight < bodyText.scrollHeight) {
+            bodyShowMore.style.display = "block";
+        }
     });
+    //console.log(document.querySelectorAll(".content"))
+    //document.querySelectorAll(".content").forEach(el => {
+    //    console.log(el.clientHeight);
+    //    console.log(el.scrollHeight);
+    //})
 } 
 
 function displayPost(data) {
@@ -45,14 +59,38 @@ function createPostHeader(data , comment = false) {
 function createPostBody(data) {
     const body = document.createElement("div");
     body.innerHTML = `
-    <h3 class="sr-only">${data.title}</h3>
-    <p>${data.body}</p>
-    `
+    <h3 class="sr-only">${data.title}</h3>`
+
+    const div = document.createElement("div");
+    const buttonContainer = document.createElement("div");
+    div.innerHTML = data.body;
+    div.classList.add("content",);
+    div.style.maxHeight = "200px";
+    div.style.overflow = "hidden";
+    const button = document.createElement("button");
+    button.style.display = "none";
+    button.classList.add("show-more", "btn");
+    button.textContent = "show more";
+    button.onclick = function() {
+        showAll(div, button);
+    }
+    buttonContainer.append(button);
+    body.append(div);
+    body.append(button);
     if (data.media) {
         const image = createMediaElement(data.media);
         body.append(image);
     }
+    if (Array.isArray(data.tags) && data.tags.length > 0) {
+        const tags = createTagsElement(data.tags);
+        body.append(tags);
+    }
     return body;
+}
+
+function showAll(div, btn) {
+    div.style.maxHeight = "none";
+    btn.style.display = "none";
 }
 
 function createReactElements(data) {
@@ -96,11 +134,26 @@ function createComments(data) {
 }
 
 function createMediaElement(media) {
+    const div = document.createElement("div");
+    div.classList.add("text-center", "mb-3");
     const image = document.createElement("img");
     image.classList.add("img-fluid");
     image.src = media.url;
     image.alt = media.alt;
-    return image;
+    div.append(image);
+    return div;
+}
+
+function createTagsElement(tags) {
+    const div = document.createElement("div");
+    div.classList.add("d-flex", "gap-2", "mb-3");
+    tags.forEach(tag => {
+        const container = document.createElement("div");
+        container.classList.add("bg-secondary-subtle", "p-1");
+        container.innerText = tag;
+        div.append(container);
+    })
+    return div;
 }
 
 function timePassed(created) {
