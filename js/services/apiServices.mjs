@@ -59,3 +59,34 @@ export async function postApiData(endpoint, data = {}) {
     const response = await fetch (`${NOROFF_API_URL}${endpoint}`, options)
     return response.json();
 }
+export async function putApiData(endpoint, data = {}) {
+    const apiKey = await getApiKey(accessToken);
+    const options = {
+        method: "put",
+        headers: {
+            "Content-Type" : "application/json",
+            Authorization: `Bearer ${accessToken}`,
+            "X-Noroff-API-Key": apiKey
+        },
+        body: JSON.stringify(data)
+    }
+    const response = await fetch (`${NOROFF_API_URL}${endpoint}`, options)
+    return response.json();
+
+}
+
+export async function deleteApiData(endpoint, data = {}) {
+    const apiKey = await getApiKey(accessToken);
+    const options = {
+        method: "delete",
+        headers: {
+            "Content-Type" : "application/json",
+            Authorization: `Bearer ${accessToken}`,
+            "X-Noroff-API-Key": apiKey
+        },
+        body: JSON.stringify(data)
+    }
+    const response = await fetch (`${NOROFF_API_URL}${endpoint}`, options)
+    //return response.json();
+
+}
