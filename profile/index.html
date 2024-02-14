@@ -24,8 +24,8 @@
                     </button>
                     <input type="search" class="form-control ps-5" placeholder="Search" aria-label="search field">
                 </form>
-                <a href="">
-                    <img src="../images/logo.png" style="width: 48px;" class="rounded-circle border border-primary align-item-end" alt="Profile">
+                <a class="user-profile-link">
+                    <img src="../images/logo.png" style="width: 48px;" class="user-profile rounded-circle border border-primary align-item-end" alt="Profile">
                 </a>    
             </div>
         </nav>
@@ -36,53 +36,83 @@
                 <div class="col-lg-4 col-xl-3 mb-3">
                     <div class="d-flex flex-column align-items-center custom-bg p-3">
                         <div class="position-relative">
-                            <img src="../images/logo.png" class="user-icon-xl" alt="">
-                            <button class="position-absolute top-0 end-0 btn btn-primary">Follow</button>
+                            <img src="../images/logo.png" class="user-icon-xl" id="user-avatar">
+                            <button class="position-absolute top-0 end-0 btn btn-primary" id="followOrEdit">Follow</button>
                         </div>
                         <h1>User Name</h1>
-                        <p>Quick description of you</p>
+                        <p id="bio">Quick description of you</p>
                     </div>
                     <div class="bg-primary rounded-5 rounded-top-0 p-3">
-                        <div class="row text-center">
-                            <div class="col mb-3">
+                        <div class="d-flex d-lg-block text-center">
+                            <div class="col mb-3 followers" id="followers">
                                 <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#followersModal">Followers
-                                    <span>40</span>
+                                    <span class="amount"></span>
                                 </button>
+                                <!-----
                                 <div class="d-none d-lg-flex gap-2">
                                     <div class="user-icon bg-white"></div>
                                     <div class="user-icon bg-white"></div>
                                     <div class="user-icon bg-white"></div>
                                     <div class="user-icon bg-white"></div>
-                                </div>
+                                </div>-->
                             </div>
-                            <div class="col mb-3">
+                            <div class="col mb-3 following" id="following">
                                 <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#followingModal">Following
-                                    <span>300</span>
+                                    <span class="amount"></span>
                                 </button>
+                                <!----
                                 <div class="d-none d-lg-flex gap-2">
                                     <div class="user-icon bg-white"></div>
                                     <div class="user-icon bg-white"></div>
                                     <div class="user-icon bg-white"></div>
                                     <div class="user-icon bg-white"></div>
                                 </div>
+                                -->
                             </div>
                         </div>
                         <div class="d-grid shadow-lg">
-                            <button class="btn btn-secondary" data-bs-toggle="collapse" data-bs-target="#collapseOne" >Write a new post</button>
+                            <button class="d-none btn btn-secondary" data-bs-toggle="collapse" data-bs-target="#collapseOne" id="create-posts" >Write a new post</button>
                         </div>
                     </div>
                 </div>
                 <div class="col-lg-8 col-xl-7">
                     <div class="collapse" id="collapseOne">
-                        <form class="col d-flex align-items-stretch rounded-pill mb-3">
-                            <div class="user-icon-lg position-absolute"></div>
-                            <textarea class="form-control rounded-start-pill ps-6" style="height: 96px;" placeholder="What on your mind?" aria-label="create a post"></textarea>
-                            <div class="d-grid">
-                                <button class="btn btn-primary rounded-end-pill">Post</button>
+                        <form class="col align-items-stretch mb-3 p-3 bg-white" id="post-form">
+                            <div class="mb-3 d-flex align-items-center gap-2">
+                                <img class="user-icon user-profile">
+                                <input class="form-control" placeholder="Title" aria-label="create a post" id="title-input" required></input>
+                            </div>
+                            <div class="mb-3">
+                                <textarea class="form-control" rows="10" id="body-input"></textarea>
+                            </div>
+                            <div class="mb-3">
+                                <button type="button" class="btn" id="media-toggle">
+                                    <i class="fas fa-image" id="media-image"></i>
+                                    <i class="fas fa-x d-none" id="media-close"></i>
+                                </button>
+                                <div class="add-media d-none">
+                                    <label for="media-url-input">Media url</label>
+                                    <input type="url" class="form-control" id="media-url-input">
+                                    <div class="text-center">
+                                        <img class="img-fluid" id="placeholder-image">
+                                    </div>
+                                    <label for="media-alt-input">Alt text</label>
+                                    <input type="text" class="form-control" id="media-alt-input">
+                                </div>
+                            </div>
+                            <div class="mb-3">
+                                <label for="tags-input" class="form-label">Tags</label>
+                                <input type="text" id="tags-input">
+                                <button type="button" class="btn btn-secondary" id="add-tag">add</button>
+                                <div class="d-flex flex-wrap gap-2" id="added-tags"></div>
+                            </div>
+                            <div class="d-grid mb-3">
+                                <button class="btn btn-primary">Post</button>
                             </div>
                         </form>
                     </div>
-                    <div class="mb-3">
+                    <div class="mb-3" id="feed">
+                        <!--
                         <div class="container bg-white p-3 mb-3">
                             <div class="border-bottom">
                                 <div class="d-flex gap-2 align-items-center">
@@ -268,20 +298,55 @@
                                     </div>    
                                 </div>
                             </div>
-                        </div>
+                        </div>-->
                     </div>
                 </div>
             </div>
         </div>
+        <div id="myModal" class="modal" tabindex="-1">
+            <div class="modal-dialog">
+              <div class="modal-content">
+                <form class="col align-items-stretch mb-3 p-3 bg-white" id="edit-form">
+                    <div class="mb-3 d-flex align-items-center gap-2">
+                        <img class="user-icon user-profile">
+                        <input class="form-control" placeholder="Title" aria-label="create a post" id="edit-title-input" required></input>
+                        <button type="button" class="btn-close" id="close-postform" aria-label="close"></button>
+                    </div>
+                    <div class="mb-3">
+                        <textarea class="form-control" rows="10" id="edit-body-input"></textarea>
+                    </div>
+                    <div class="mb-3">
+                        <label for="media-url-input">Media url</label>
+                        <input type="url" class="form-control" id="edit-media-url-input">
+                        <div class="text-center">
+                            <img class="img-fluid" id="edit-placeholder-image">
+                        </div>
+                        <label for="media-alt-input">Alt text</label>
+                        <input type="text" class="form-control" id="edit-media-alt-input">
+                    </div>
+                    <div class="mb-3">
+                        <label for="tags-input" class="form-label">Tags</label>
+                        <input type="text" id="edit-tags-input">
+                        <button type="button" class="btn btn-secondary" id="edit-add-tag">add</button>
+                        <div class="d-flex flex-wrap gap-2" id="edit-added-tags"></div>
+                    </div>
+                    <div class="d-grid mb-3">
+                        <button class="btn btn-primary">Edit</button>
+                    </div>
+                </form>
+              </div>
+            </div>
+          </div>
         <div class="modal fade" id="followersModal">
             <div class="modal-dialog modal-dialog-centered">
-                <div class="modal-content">
+                <div class="modal-content followers">
                     <div class="modal-header">
                        <h2 class="modal-title">Followers</h2>
-                       <p>40</p>
+                       <p class="amount">40</p>
                        <button class="btn-close" data-bs-dismiss="modal" aria-label="close"></button>
                     </div>
-                    <div class="modal-body d-flex flex-wrap gap-3">
+                    <div class="modal-body">
+                        <!----
                         <div class="d-flex flex-column align-items-center">
                             <div class="user-icon"></div>
                             <h3 class="text-nowrap">User name</h3>
@@ -305,20 +370,21 @@
                         <div class="d-flex flex-column align-items-center">
                             <div class="user-icon"></div>
                             <h3 class="text-nowrap">User name</h3>
-                        </div>
+                        </div>-->
                     </div>
                 </div>
             </div>
         </div>
         <div class="modal fade" id="followingModal">
             <div class="modal-dialog modal-dialog-centered">
-                <div class="modal-content">
+                <div class="modal-content following">
                     <div class="modal-header">
                        <h2 class="modal-title">Following</h2>
-                       <p>300</p>
+                       <p class="amount">300</p>
                        <button class="btn-close" data-bs-dismiss="modal" aria-label="close"></button>
                     </div>
-                    <div class="modal-body d-flex flex-wrap gap-3">
+                    <div class="modal-body">
+                        <!--
                         <div class="d-flex flex-column align-items-center">
                             <div class="user-icon"></div>
                             <h3 class="text-nowrap">User name</h3>
@@ -342,12 +408,13 @@
                         <div class="d-flex flex-column align-items-center">
                             <div class="user-icon"></div>
                             <h3 class="text-nowrap">User name</h3>
-                        </div>
+                        </div>-->
                     </div>
                 </div>
             </div>
         </div>
     </main>
     <script src="../node_modules/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script type="module" src="../js/index.js"></script>
 </body>
 </html>

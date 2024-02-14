@@ -16,7 +16,9 @@ function createPostHeader(data) {
     header.classList.add("border-bottom");
     header.innerHTML = `
     <div class="d-flex gap-2 align-items-center">
-        <img src="${data.author.avatar.url}" class="user-icon" alt="${data.author.avatar.alt}">
+        <a href="../profile/index.html?user=${data.author.name}">
+            <img src="${data.author.avatar.url}" class="user-icon" alt="${data.author.avatar.alt}">
+        </a>
         <h2>${data.author.name}</h2>
     </div>`;
 
