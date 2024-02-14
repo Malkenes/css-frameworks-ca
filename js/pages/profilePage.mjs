@@ -7,9 +7,20 @@ export function displayProfile(data) {
     avatar.src = data.data.avatar.url;
     avatar.alt = data.data.avatar.alt;
 
+    const banner = document.querySelector("#banner");
+    getMeta(data.data.banner.url, (err,img) => {
+        if (img.naturalHeight > img.naturalWidth) {
+            banner.style.backgroundSize = "100% auto";
+        } else {
+            banner.style.backgroundSize = "auto 100%";
+
+        }
+        banner.style.backgroundImage = `url(${data.data.banner.url})`;
+    });
+
     const user = document.querySelector("h1");
     user.textContent = data.data.name;
-
+    user.style.filter = "drop-shadow(4px -4px 12px white)";
     const bio = document.querySelector("#bio");
     if (data.data.bio) {
         bio.textContent = data.data.bio;
@@ -18,6 +29,9 @@ export function displayProfile(data) {
     const followOrEdit = document.querySelector("#followOrEdit");
     if (data.data.name === localStorage["name"]) {
         followOrEdit.textContent = "Edit";
+        followOrEdit.onclick = function() {
+             editProfile(data.data.avatar, data.data.banner);
+        }
         const postBtn = document.querySelector("#create-posts");
         postBtn.classList.remove("d-none");
     } else {
@@ -85,4 +99,63 @@ function displayUsers(users, amount = users.length) {
         div.append(user);
     }
     return div;
+}
+
+function editProfile(avatar, banner) {
+    const editModal = new bootstrap.Modal(document.getElementById("edit-modal"))
+    const modal = document.querySelector("#edit-modal");
+    const userImg = modal.querySelector("img");
+    const userBanner = modal.querySelector(".test-bg");
+    userBanner.style.backgroundImage = `url(${banner.url})`;
+    userBanner.style.backgroundSize = "100% auto";
+    userImg.src = avatar.url;
+    const avatarUrl = document.querySelector("#avatar-url");
+    const avatarAlt = document.querySelector("#avatar-alt");
+    const bannerUrl = document.querySelector("#banner-url");
+    const bannerAlt = document.querySelector("#banner-alt");
+    avatarUrl.value = avatar.url;
+    avatarAlt.value = avatar.alt;
+    bannerUrl.value = banner.url;
+    bannerAlt.value = banner.alt;
+    editModal.toggle();
+    avatarUrl.addEventListener("input", () => {
+        userImg.src = avatarUrl.value;
+    });
+    bannerUrl.addEventListener("input", () => {
+        getMeta(bannerUrl.value, (err,img) => {
+            if (img.naturalHeight > img.naturalWidth) {
+                userBanner.style.backgroundSize = "100% auto";
+            } else {
+                userBanner.style.backgroundSize = "auto 100%";
+
+            }
+            //console.log(img.naturalWidth,img.naturalHeight);
+        });
+        userBanner.style.backgroundImage = `url(${bannerUrl.value})`;
+    })
+
+    const form = document.querySelector("#edit-profile-form");
+    form.addEventListener("submit", event => {
+        event.preventDefault();
+        const dataPackage = {}
+        if (bannerUrl) {
+            dataPackage.banner = {};
+            dataPackage.banner.url = bannerUrl.value;
+            dataPackage.banner.alt = bannerAlt.value;
+        }
+        if (avatarUrl) {
+            dataPackage.avatar = {};
+            dataPackage.avatar.url = avatarUrl.value;
+            dataPackage.avatar.alt = avatarAlt.value;
+        }
+        putApiData("/social/profiles/" + localStorage["name"], dataPackage);
+        editModal.hide()
+    })
+}
+
+function getMeta(url,cb) {
+    const img = new Image();
+    img.onload = () => cb(null, img);
+    img.onerror = (err) => cb(err);
+    img.src = url;
 }

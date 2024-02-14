@@ -118,17 +118,17 @@ editForm.addEventListener("submit", event => {
     console.log(dataPackage);
     console.log(postId);
 })
+if (createPost) {
+    createPost.addEventListener("click", () => {
+        postForm.classList.remove("d-none");
+        createPost.classList.add("d-none");
+    })
 
-createPost.addEventListener("click", () => {
-    postForm.classList.remove("d-none");
-    createPost.classList.add("d-none");
-})
-
-closePostForm.addEventListener("click" , () => {
-    postForm.classList.add("d-none");
-    createPost.classList.remove("d-none");
-})
-
+    closePostForm.addEventListener("click" , () => {
+        postForm.classList.add("d-none");
+        createPost.classList.remove("d-none");
+    })
+}
 postForm.addEventListener("submit", event => {
     event.preventDefault();
     const dataPackage = {}

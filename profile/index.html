@@ -25,7 +25,7 @@
                     <input type="search" class="form-control ps-5" placeholder="Search" aria-label="search field">
                 </form>
                 <a class="user-profile-link">
-                    <img src="../images/logo.png" style="width: 48px;" class="user-profile rounded-circle border border-primary align-item-end" alt="Profile">
+                    <img src="../images/logo.png" class="user-icon align-item-end user-profile" alt="profile">
                 </a>    
             </div>
         </nav>
@@ -34,15 +34,17 @@
         <div class="container">
             <div class="row">
                 <div class="col-lg-4 col-xl-3 mb-3">
-                    <div class="d-flex flex-column align-items-center custom-bg p-3">
+                    <div class="d-flex flex-column align-items-center p-3 gap-2" id="banner">
                         <div class="position-relative">
-                            <img src="../images/logo.png" class="user-icon-xl" id="user-avatar">
+                            <img src="../images/logo.png" class="user-icon-xl shadow-lg" id="user-avatar">
                             <button class="position-absolute top-0 end-0 btn btn-primary" id="followOrEdit">Follow</button>
                         </div>
-                        <h1>User Name</h1>
-                        <p id="bio">Quick description of you</p>
+                        <div class="bg-light bg-opacity-50 p-2 text-center">
+                            <h1 class="m-0">User Name</h1>
+                        </div>
                     </div>
                     <div class="bg-primary rounded-5 rounded-top-0 p-3">
+                        <div id="bio"></div>
                         <div class="d-flex d-lg-block text-center">
                             <div class="col mb-3 followers" id="followers">
                                 <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#followersModal">Followers
@@ -303,14 +305,14 @@
                 </div>
             </div>
         </div>
-        <div id="myModal" class="modal" tabindex="-1">
+        <div id="myModal" class="modal fade" tabindex="-1">
             <div class="modal-dialog">
               <div class="modal-content">
                 <form class="col align-items-stretch mb-3 p-3 bg-white" id="edit-form">
                     <div class="mb-3 d-flex align-items-center gap-2">
                         <img class="user-icon user-profile">
                         <input class="form-control" placeholder="Title" aria-label="create a post" id="edit-title-input" required></input>
-                        <button type="button" class="btn-close" id="close-postform" aria-label="close"></button>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" data-bs-target="#myModal" aria-label="Close"></button>
                     </div>
                     <div class="mb-3">
                         <textarea class="form-control" rows="10" id="edit-body-input"></textarea>
@@ -409,6 +411,59 @@
                             <div class="user-icon"></div>
                             <h3 class="text-nowrap">User name</h3>
                         </div>-->
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="modal fade" id="edit-modal">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h2 class="m-0">Edit Profile</h2>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" data-bs-target="#edit-modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="d-flex flex-column align-items-center p-3 mb-3 test-bg">
+                            <div class="position-relative">
+                                <img src="../images/logo.png" class="user-icon-xl">
+                            </div>
+                            <p class="fs-1">User Name</p>
+                        </div>
+                        <form id="edit-profile-form">
+                            <div>  
+                                <h3 class="fs-5">Avatar</h3>
+                                <div class="mb-3 row">
+                                    <label for="avatar-url" class="col-auto col-form-label">Url</label>
+                                    <div class="col">
+                                        <input type="url" class="form-control" id="avatar-url">
+                                    </div>
+                                </div>
+                                <div class="mb-3 row">
+                                    <label for="avatar-alt" class="col-auto col-form-label">Alt</label>
+                                    <div class="col">
+                                        <input type="text" class="form-control" id="avatar-alt">
+                                    </div>
+                                </div>
+                            </div>
+                            <div>
+                                <h3 class="fs-5">Banner</h3>
+                                <div class="mb-3 row">
+                                    <label for="banner-url" class="col-auto col-form-label">Url</label>
+                                    <div class="col">
+                                        <input type="url" class="form-control" id="banner-url">
+                                    </div>
+                                </div>
+                                <div class="mb-3 row">
+                                    <label for="banner-alt" class="col-auto col-form-label">Alt</label>
+                                    <div class="col">
+                                        <input type="text" class="form-control" id="banner-alt">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="d-grid mb-3">
+                                <button class="btn btn-primary">Save</button>
+                            </div>      
+                        </form>
                     </div>
                 </div>
             </div>
