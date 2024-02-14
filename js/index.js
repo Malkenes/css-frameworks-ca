@@ -272,3 +272,10 @@ async function editPost(id) {
     myModal.toggle();
 }
 
+const logoutBtn = document.querySelector("#logout-btn");
+if (logoutBtn) {
+    logoutBtn.addEventListener("click", () => {
+        localStorage.clear();
+        window.location.href = "../index.html";
+    })
+}

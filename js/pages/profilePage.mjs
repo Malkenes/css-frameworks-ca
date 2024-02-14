@@ -60,15 +60,15 @@ function displayFollow(followers, containers) {
         const followLength = followers.length;
         amount.textContent = followLength;
         let list = displayUsers(followers);
-        if (followLength >= 4) {
-            list = displayUsers(followers,4);
-        }
         const modal = container.querySelector(".modal-body");
         if (modal) {
-            list.classList.add("d-flex", "flex-wrap", "gap-3");
+            list.classList.add("row");
             modal.append(list);
         } else {
-            list.classList.add("d-none", "d-lg-flex", "gap-2");
+            if (followLength >= 3) {
+                list = displayUsers(followers,3);
+            }    
+            list.classList.add("d-none", "d-lg-flex", "row");
             container.append(list);
         }
     })
@@ -88,11 +88,12 @@ function displayUsers(users, amount = users.length) {
     for (let i = 0 ; i < amount ; i++) {
         const user = document.createElement("a");
         user.href = "../profile/index.html?user=" + users[i].name;
-        user.classList.add("d-flex","flex-column","align-items-center");
+        user.classList.add("d-flex","flex-column","align-items-center","col-4", "overflow-hidden");
         const userImg = document.createElement("img");
         userImg.src = users[i].avatar.url;
         userImg.classList.add("user-icon");
         const userName = document.createElement("h3");
+        userName.classList.add("fs-5");
         userName.textContent = users[i].name;
         user.append(userImg);
         user.append(userName);
