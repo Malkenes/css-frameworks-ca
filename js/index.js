@@ -1,6 +1,8 @@
 import { initializeFormValidation } from "./services/authService.mjs";
 import { apiCall, deleteApiData, postApiData, putApiData } from "./services/apiServices.mjs";
 import { displayFeed } from "./pages/feed.mjs";
+import { displayProfile } from "./pages/profilePage.mjs";
+
 if (localStorage["accessToken"]) {
     const apiName = await apiCall("/social/profiles/" + localStorage["name"]);
     const user = document.querySelectorAll(".user-profile");
@@ -8,7 +10,18 @@ if (localStorage["accessToken"]) {
         img.src = apiName.data.avatar.url;
         img.alt = apiName.data.avatar.alt;
     })
+    const userLink = document.querySelectorAll(".user-profile-link");
+    Array.from(userLink).forEach(link => {
+        link.href = "../profile/index.html?user=" + localStorage["name"];
+    })
 
+    const queryString = document.location.search;
+    const params = new URLSearchParams(queryString);
+    const userParam = params.get("user");
+    if (userParam) {
+        const userProfile = await apiCall("/social/profiles/" + userParam + "?_following=true&_followers=true");
+        displayProfile(userProfile);
+    }
     const feed = document.querySelector("#feed");
     if (feed) {
         let page = 1;
@@ -53,11 +66,16 @@ if (localStorage["accessToken"]) {
 }
 
 async function fetchFeed(page) {
-    const apiData = await apiCall("/social/posts?limit=10&_author=true&_reactions=true&_comments=true&page=" + page);
+    const queryString = document.location.search;
+    const params = new URLSearchParams(queryString);
+    const user = params.get("user");
+    let endpoint = "/social/posts";
+    if (user) {
+        endpoint = `/social/profiles/${user}/posts`;
+    }
+    const apiData = await apiCall(endpoint +"?limit=10&_author=true&_reactions=true&_comments=true&page=" + page);
     console.log(apiData);
     displayFeed(apiData);
-    //const buass = document.querySelector(".edit-btn");
-    //console.log(buass.parentNode.parentNode.parentNode);
 }
 const forms = document.querySelectorAll(".needs-validation");
 initializeFormValidation(forms);
@@ -100,17 +118,17 @@ editForm.addEventListener("submit", event => {
     console.log(dataPackage);
     console.log(postId);
 })
+if (createPost) {
+    createPost.addEventListener("click", () => {
+        postForm.classList.remove("d-none");
+        createPost.classList.add("d-none");
+    })
 
-createPost.addEventListener("click", () => {
-    postForm.classList.remove("d-none");
-    createPost.classList.add("d-none");
-})
-
-closePostForm.addEventListener("click" , () => {
-    postForm.classList.add("d-none");
-    createPost.classList.remove("d-none");
-})
-
+    closePostForm.addEventListener("click" , () => {
+        postForm.classList.add("d-none");
+        createPost.classList.remove("d-none");
+    })
+}
 postForm.addEventListener("submit", event => {
     event.preventDefault();
     const dataPackage = {}
@@ -254,11 +272,10 @@ async function editPost(id) {
     myModal.toggle();
 }
 
-/*
-const testTags = document.querySelectorAll(".tag");
-if (testTags) {
-    Array.from(testTags).forEach(tag => {
-        console.log(tag);
+const logoutBtn = document.querySelector("#logout-btn");
+if (logoutBtn) {
+    logoutBtn.addEventListener("click", () => {
+        localStorage.clear();
+        window.location.href = "../index.html";
     })
 }
-*/
