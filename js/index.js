@@ -1,7 +1,8 @@
 import { initializeFormValidation } from "./services/authService.mjs";
 import { apiCall, deleteApiData, postApiData, putApiData } from "./services/apiServices.mjs";
-import { displayFeed } from "./pages/feed.mjs";
+import { clearFeed, displayFeed } from "./pages/feed.mjs";
 import { displayProfile } from "./pages/profilePage.mjs";
+import { handleInputChange } from "./components/search.mjs";
 
 if (localStorage["accessToken"]) {
     const apiName = await apiCall("/social/profiles/" + localStorage["name"]);
@@ -75,7 +76,7 @@ async function fetchFeed(page) {
     }
     const apiData = await apiCall(endpoint +"?limit=10&_author=true&_reactions=true&_comments=true&page=" + page);
     console.log(apiData);
-    displayFeed(apiData);
+    displayFeed(apiData.data);
 }
 const forms = document.querySelectorAll(".needs-validation");
 initializeFormValidation(forms);
@@ -277,5 +278,108 @@ if (logoutBtn) {
     logoutBtn.addEventListener("click", () => {
         localStorage.clear();
         window.location.href = "../index.html";
+    })
+}
+
+const trending = document.querySelector("#trending");
+if (trending) {
+    trending.addEventListener("click", async () => {
+        const allPosts = await getAllPosts();
+        allPosts.sort((a,b) => calculatePopularityScore(b) - calculatePopularityScore(a));
+        console.log(allPosts);
+        getTagCount(allPosts);
+        const filteredAllPosts = allPosts.filter((post) => {
+            const date = Date.parse(post.created);
+            const timeElapsed = Date.now() - date;
+            if (timeElapsed <= 1000*60*60*24) {
+                return true;
+            } else {
+                return false;
+            }
+        })
+        console.log(filteredAllPosts);
+        //clearFeed();
+        //displayFeed(allPosts);
+    });
+}
+
+async function getAllPosts() {
+    const allDatatest = [];
+    let datatest = await apiCall("/social/posts?_author=true&_reactions=true&_comments=true");
+    allDatatest.push(...datatest.data);
+    console.log(datatest.meta.isLastPage);
+    while (!datatest.meta.isLastPage) {
+        datatest = await apiCall(`/social/posts?_author=true&_reactions=true&_comments=true&page=${datatest.meta.currentPage + 1}`);
+        console.log(datatest.meta.isLastPage);
+        allDatatest.push(...datatest.data);
+    }
+    //console.log(allDatatest);
+    return allDatatest;
+}
+
+function calculatePopularityScore(post) {
+    const comments = post._count.comments || 0;
+    const reactions = post._count.reactions || 0;
+    return comments*2 + reactions;
+}
+
+function getTagCount(posts) {
+    const tagCount = {};
+
+    posts.forEach(post => {
+        post.tags.forEach(tag => {
+            if (tag.length > 1) {
+                tagCount[tag] = (tagCount[tag] || 0) + 1;
+            }
+        })
+    })
+
+    Object.keys(tagCount).forEach(tag => {
+        if (tagCount[tag] === 1) {
+            delete tagCount[tag];
+        }
+    })
+
+    const tagsTest = Object.keys(tagCount).map(tag => ({tag, count: tagCount[tag]})); 
+
+    tagsTest.sort((a,b) => b.count - a.count);
+    console.log(tagsTest);
+    const sortedTags = tagsTest.map(item => item.tag);
+    return sortedTags;
+}
+
+const TagSelection = document.querySelector("#tag-selection");
+if (TagSelection) {
+    const allPosts = await getAllPosts();
+    const popularTags = getTagCount(allPosts);
+    for (let i = 0; i < 10; i++) {
+        const tagElement = document.createElement("li");
+        tagElement.classList.add("list-group-item", "list-group-item-action");
+        if (i % 2) {
+            tagElement.classList.add("list-group-item-primary");
+        }
+        const tagButton = document.createElement("button");
+        tagButton.classList.add("btn");
+        tagButton.textContent = popularTags[i];
+        tagButton.onclick = async function() {
+            const apiData = await apiCall("/social/posts?_author=true&_reactions=true&_comments=true&_tag=" + tagButton.textContent);
+            clearFeed();
+            displayFeed(apiData.data);
+        }
+        tagElement.append(tagButton);
+        TagSelection.append(tagElement);
+    }
+}
+const searchInput = document.querySelector("#search-input");
+if (searchInput) {
+    const searchResults = new bootstrap.Collapse("#search-results", {toggle: false});
+    searchInput.addEventListener("input", handleInputChange);
+    searchInput.addEventListener("focusin", () => {
+        searchResults.show();
+    })
+    searchInput.addEventListener("focusout", () => {
+        setTimeout(function() {
+            searchResults.hide();
+        },1000);
     })
 }

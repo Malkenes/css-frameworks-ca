@@ -3,7 +3,7 @@ import { displayPost } from "../components/postList.mjs";
 
 export function displayFeed(data) {
     const feed = document.querySelector("#feed");
-    data.data.forEach(element => {
+    data.forEach(element => {
         const post = document.createElement("div");
         post.classList.add("container", "bg-white", "p-3", "mb-3");
         post.dataset.id = element.id;
@@ -21,7 +21,10 @@ export function displayFeed(data) {
         }
     });
 } 
-
+export function clearFeed() {
+    const feed = document.querySelector("#feed");
+    feed.innerHTML = "";
+}
 export function showAll(div, btn) {
     div.style.maxHeight = "none";
     btn.style.display = "none";
