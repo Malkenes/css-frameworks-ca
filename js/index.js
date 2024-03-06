@@ -5,6 +5,7 @@ import { displayProfile } from "./pages/profilePage.mjs";
 import { handleInputChange } from "./components/search.mjs";
 import { displaySinglePost } from "./pages/post.mjs";
 import { displaySearchResults } from "./pages/search.mjs";
+import { updateReactions } from "./components/commentSection.mjs";
 
 if (localStorage["accessToken"]) {
     const apiName = await apiCall("/social/profiles/" + localStorage["name"]);
@@ -50,7 +51,11 @@ if (localStorage["accessToken"]) {
             const postId = postContainer.dataset.id;
             if (e.target.classList.contains("react-btn")) {
                 const emoji = e.target.childNodes[0].nodeValue.trim();
-                putApiData(`/social/posts/${postId}/react/${emoji}`);
+                async function reactToPost() {
+                    const testEmo = await putApiData(`/social/posts/${postId}/react/${emoji}`);
+                    updateReactions(postContainer, testEmo.data.reactions);
+                }
+                reactToPost();
             }
             if (e.target.classList.contains("toggle-comment-btn")) {
                 const commentContainer = e.target.closest(".comment-container");

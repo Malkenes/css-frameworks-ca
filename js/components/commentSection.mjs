@@ -29,7 +29,7 @@ function createReactElements(reactions) {
     div.innerHTML = `
     <button class="btn react-btn fs-5 position-relative">💗<span class="position-absolute top-0 end-0 badge bg-secondary">${hearth}</span></button>
     <button class="btn react-btn fs-5 position-relative">😀<span class="position-absolute top-0 end-0 badge bg-secondary">${smile}</span></button>
-    <button class="btn react-btn fs-5 position-relative">🙁<span class="position-absolute top-0 end-0 badge bg-secondary">${smile}</span></button>
+    <button class="btn react-btn fs-5 position-relative">🙁<span class="position-absolute top-0 end-0 badge bg-secondary">${frown}</span></button>
     <button class="btn toggle-comment-btn">Reply</button>
     `;
     return div;
@@ -76,3 +76,8 @@ function createComments(comments) {
     return div;
 }
 
+export function updateReactions(container, reactions) {
+    const item = container.querySelector(".bg-primary-subtle");
+    const newItem = createReactElements(reactions);
+    item.replaceWith(newItem);
+}

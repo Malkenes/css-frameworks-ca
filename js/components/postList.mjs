@@ -13,7 +13,7 @@ export function displayPost(data) {
 
 function createPostHeader(data) {
     const header = document.createElement("div");
-    header.classList.add("border-bottom");
+    header.classList.add("border-bottom", "mb-3");
     header.innerHTML = `
     <div class="d-flex gap-2 align-items-center">
         <a href="../profile/index.html?user=${data.author.name}">
@@ -52,7 +52,7 @@ function createPostBody(data) {
     const div = document.createElement("div");
     const buttonContainer = document.createElement("div");
     div.innerHTML = data.body;
-    div.classList.add("content");
+    div.classList.add("content", "mb-3");
     div.style.maxHeight = "200px";
     div.style.overflow = "hidden";
     const button = document.createElement("button");
