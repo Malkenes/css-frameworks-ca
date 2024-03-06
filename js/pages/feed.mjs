@@ -7,7 +7,7 @@ export function displayFeed(data) {
         const post = document.createElement("div");
         post.classList.add("container", "bg-white", "p-3", "mb-3");
         post.dataset.id = element.id;
-
+        post.innerHTML= `<a href="../post/index.html?id=${element.id}" target="_blank" class="float-end"><i class="fas fa-arrow-up-right-from-square"></i></a>`;
         const postContent = displayPost(element);
         const postComments = commentSection(element.comments, element.reactions);
         post.append(postContent);

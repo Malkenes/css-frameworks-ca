@@ -12,7 +12,6 @@ export function commentSection(comments, reactions) {
 function createReactElements(reactions) {
     const div = document.createElement("div");
     div.classList.add("bg-primary-subtle");
-    //console.log(data.reactions);
     let hearth = 0;
     let smile = 0;
     let frown = 0;
@@ -28,9 +27,9 @@ function createReactElements(reactions) {
         }
     });
     div.innerHTML = `
-    <button class="btn react-btn fs-3 position-relative">💗<span class="position-absolute top-0 start-100 translate-middle badge bg-danger">${hearth}</span></button>
-    <button class="btn react-btn fs-3 position-relative">😀<span class="position-absolute top-0 start-100 translate-middle badge bg-danger">${smile}</span></button>
-    <button class="btn react-btn fs-3 position-relative">🙁<span class="position-absolute top-0 start-100 translate-middle badge bg-danger">${frown}</span></button>
+    <button class="btn react-btn fs-5 position-relative">💗<span class="position-absolute top-0 end-0 badge bg-secondary">${hearth}</span></button>
+    <button class="btn react-btn fs-5 position-relative">😀<span class="position-absolute top-0 end-0 badge bg-secondary">${smile}</span></button>
+    <button class="btn react-btn fs-5 position-relative">🙁<span class="position-absolute top-0 end-0 badge bg-secondary">${smile}</span></button>
     <button class="btn toggle-comment-btn">Reply</button>
     `;
     return div;

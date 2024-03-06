@@ -11,7 +11,7 @@ export async function handleInputChange(event) {
         for (let i = 0; i < numPosts; i++) {
             const post = document.createElement("li");
             post.classList.add("list-group-item");
-            post.textContent = posts[i].title;
+            post.innerHTML = `<a href="../post/index.html?id=${posts[i].id}">${posts[i].title}</a>`
             postList.append(post);
         }
 
