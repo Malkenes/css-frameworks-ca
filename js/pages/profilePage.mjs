@@ -2,7 +2,6 @@ import { putApiData } from "../services/apiServices.mjs";
 
 export function displayProfile(data) {
 
-    console.log(data);
     const avatar = document.querySelector("#user-avatar");
     avatar.src = data.data.avatar.url;
     avatar.alt = data.data.avatar.alt;
