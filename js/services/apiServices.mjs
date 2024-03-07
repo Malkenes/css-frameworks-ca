@@ -45,6 +45,12 @@ export async function apiCall(endpoint) {
     }
 }
 
+/**
+ * @description Sends a POST request to the specified endpoint with the provided data.
+ * @param {string} endpoint
+ * @param {Object} [data={}]
+ * @returns {Promise<Object>}
+ */
 export async function postApiData(endpoint, data = {}) {
     const apiKey = await getApiKey(accessToken);
     const options = {
@@ -59,6 +65,13 @@ export async function postApiData(endpoint, data = {}) {
     const response = await fetch (`${NOROFF_API_URL}${endpoint}`, options)
     return response.json();
 }
+
+/**
+ * @description Sends a PUT request to the specified endpoint with the provided data.
+ * @param {string} endpoint
+ * @param {Object} [data={}]
+ * @returns {Promise<Object>}
+ */
 export async function putApiData(endpoint, data = {}) {
     const apiKey = await getApiKey(accessToken);
     const options = {
@@ -75,6 +88,12 @@ export async function putApiData(endpoint, data = {}) {
 
 }
 
+/**
+ * @description Sends a DELETE request to the specified endpoint with the provided data.
+ * @param {string} endpoint
+ * @param {Object} [data={}]
+ * @returns {Promise<void>}
+ */
 export async function deleteApiData(endpoint, data = {}) {
     const apiKey = await getApiKey(accessToken);
     const options = {
@@ -87,6 +106,4 @@ export async function deleteApiData(endpoint, data = {}) {
         body: JSON.stringify(data)
     }
     const response = await fetch (`${NOROFF_API_URL}${endpoint}`, options)
-    //return response.json();
-
 }

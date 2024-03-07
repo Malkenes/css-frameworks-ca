@@ -1,8 +1,11 @@
 import { displayPost } from "../components/postList.mjs";
 import { commentSection } from "../components/commentSection.mjs";
 
+/**
+ * @description Displays a single post on the page.
+ * @param {Object} data
+ */
 export function displaySinglePost(data) {
-    console.log(data);
     const feed = document.querySelector("#feed");
     const post = document.createElement("div");
     post.classList.add("bg-white", "p-3");

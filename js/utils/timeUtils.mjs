@@ -1,4 +1,9 @@
 
+/**
+ * @description Calculate the time elapsed since a given timestamp and format it as a human-readable string.
+ * @param {string} created
+ * @returns {HTMLDivElement}
+ */
 export function timePassed(created) {
     const div = document.createElement("p");
     div.classList.add("text-black-50");

@@ -3,7 +3,11 @@ import { displayPost } from "../components/postList.mjs";
 import { sortByPopularity, sortByTrending, getTagCount } from "../components/sort.mjs";
 import { apiCall } from "../services/apiServices.mjs";
 
-export async function displayFeedTest() {
+/**
+ * @description Retrieves and displays the feed of posts, including options for sorting and filtering.
+ * @returns {void}
+ */
+export async function getFeed() {
     const postPerPage = 10;
     let currentPage = 1;
     const data = await getAllPosts();
@@ -69,6 +73,11 @@ export async function displayFeedTest() {
     displayFeed(dataCopy.slice(0,10));
 }
 
+/**
+ * @description Displays a feed containing posts with the provided data.
+ * @param {Array} data
+ * @returns {void}
+ */
 export function displayFeed(data) {
     const feed = document.querySelector("#feed");
     data.forEach(element => {
@@ -89,15 +98,24 @@ export function displayFeed(data) {
         }
     });
 } 
+
+/**
+ * @description Clear the content of the feed element.
+ */
 export function clearFeed() {
     const feed = document.querySelector("#feed");
     feed.innerHTML = "";
 }
+
 export function showAll(div, btn) {
     div.style.maxHeight = "none";
     btn.style.display = "none";
 }
 
+/**
+ * @description Retrieve all posts with associated author, reactions, and comments data.
+ * @returns {Promise<Array>} - A promise that resolves to an array containing all posts data.
+ */
 async function getAllPosts() {
     let datatest = await apiCall("/social/posts?_author=true&_reactions=true&_comments=true");
     const allDatatest = [];
@@ -109,6 +127,10 @@ async function getAllPosts() {
     return allDatatest;
 }
 
+/**
+ * @description Set the active state for a specific button within a group of buttons.
+ * @param {HTMLElement} button
+ */
 function setActive(button) {
     const myTabs = document.querySelectorAll("#myTab button");
     Array.from(myTabs).forEach(tab => {

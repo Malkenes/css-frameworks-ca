@@ -1,5 +1,9 @@
 import { apiCall } from "../services/apiServices.mjs";
 
+/**
+ * @description Displays search results for posts and profiles based on the provided search parameter.
+ * @param {string} param
+ */
 export function displaySearchResults(param) {
     
     const searchPosts = document.querySelector("#search-posts");
@@ -7,59 +11,71 @@ export function displaySearchResults(param) {
     const nextPage = document.querySelector("#next-page");
     const prevPage = document.querySelector("#prev-page");
     const searchTitle = document.querySelector("#search-result-title");
-    searchTitle.textContent += " for: " + param;
     const title = document.querySelector("title");
+
+    searchTitle.textContent += " for: " + param;
     title.textContent += " - " + param;
 
+    // Initialize
     let currentPage = 1;
     let currentEndpoint = "/social/posts/search?limit=10&_author=true&q=" + param;
-
     let extractData = item => ({
         title: item.title,
         body: item.body,
         href: `../post/index.html?id=${item.id}`,
     });
-
-
     displaySearchAmount(param);
 
+    /**
+    * @description Fetches search results from the specified endpoint and displays them on the page.
+    * @param {string} endpoint
+    * @param {Function} data
+    * @param {number} page
+    */
     async function displayResults(endpoint, data, page) {
-        const searchResult = await apiCall(endpoint + "&page=" + page);
-        console.log(searchResult);
-        if (searchResult.meta.isLastPage) {
-            nextPage.disabled = true;
-        } else {
-            nextPage.disabled = false;
-        }
-        if (searchResult.meta.isFirstPage) {
-            prevPage.disabled = true;
-        } else {
-            prevPage.disabled = false;
-        }
-        const searchResults = document.querySelector("#search");
-        searchResults.innerHTML = "";
-        searchResult.data.forEach(item => {
-            const extractData = data(item);
-            const searchItem = document.createElement("div");
-            searchItem.classList.add("bg-white", "mb-3");
-            const searchText = document.createElement("a");
-            searchText.href = extractData.href;
-            searchText.classList.add("text-black", "link-underline","link-underline-opacity-0", "p-2", "d-flex", "align-items-center", "gap-3");
-            let htmlContent = `<strong>${extractData.title}</strong>`
-            if (extractData.body) {
-                htmlContent += `<p>${extractData.body}</p>`
+        try {
+            const searchResult = await apiCall(endpoint + "&page=" + page);
+            console.log(searchResult);
+            if (searchResult.meta.isLastPage) {
+                nextPage.disabled = true;
+            } else {
+                nextPage.disabled = false;
             }
-            if (extractData.avatar) {
-                const avatarImg = document.createElement("img");
-                avatarImg.src = extractData.avatar;
-                avatarImg.classList.add("user-icon");
-                searchText.append(avatarImg);
+            if (searchResult.meta.isFirstPage) {
+                prevPage.disabled = true;
+            } else {
+                prevPage.disabled = false;
             }
-            searchText.innerHTML += `<div>${htmlContent}</div>`;
-            searchItem.append(searchText);
-            searchResults.append(searchItem);
-        })
+            const searchResults = document.querySelector("#search");
+            searchResults.innerHTML = "";
+            searchResult.data.forEach(item => {
+                const extractData = data(item);
+                const searchItem = document.createElement("div");
+                searchItem.classList.add("bg-white", "mb-3");
+                const searchText = document.createElement("a");
+                searchText.href = extractData.href;
+                searchText.classList.add("text-black", "link-underline","link-underline-opacity-0", "p-2", "d-flex", "align-items-center", "gap-3");
+                let htmlContent = `<strong>${extractData.title}</strong>`
+                if (extractData.body) {
+                    htmlContent += `<p>${extractData.body}</p>`
+                }
+                if (extractData.avatar) {
+                    const avatarImg = document.createElement("img");
+                    avatarImg.src = extractData.avatar;
+                    avatarImg.classList.add("user-icon");
+                    searchText.append(avatarImg);
+                }
+                searchText.innerHTML += `<div>${htmlContent}</div>`;
+                searchItem.append(searchText);
+                searchResults.append(searchItem);
+            })
+    
+        } catch (error) {
+            console.log("error");
+        }
     }
+
+    // event listener for search posts button
     searchPosts.addEventListener("click", () => {
         currentPage = 1;
         currentEndpoint = "/social/posts/search?limit=10&_author=true&q=" + param;
@@ -72,6 +88,7 @@ export function displaySearchResults(param) {
         displayResults(currentEndpoint, extractData, currentPage);
     });
 
+    // event listener for search profiles button
     searchProfiles.addEventListener("click", () => {
         currentPage = 1;
         currentEndpoint = "/social/profiles/search?limit=10&q=" + param;
@@ -84,6 +101,7 @@ export function displaySearchResults(param) {
         displayResults(currentEndpoint, extractData, currentPage);
     });
 
+    // initial display of search results
     displayResults(currentEndpoint, extractData, currentPage);
 
     nextPage.addEventListener("click", () => {
@@ -106,6 +124,11 @@ export function displaySearchResults(param) {
     })
 }
 
+/**
+ * @description Fetches and displays the total count of search results for posts and profiles based on the provided search parameter.
+ * @param {string} param
+ * @throws {Error}
+ */
 async function displaySearchAmount(param) {
     const postAmount = await apiCall("/social/posts/search?q=" + param);
     const postBadge = document.querySelector("#search-post-amount");

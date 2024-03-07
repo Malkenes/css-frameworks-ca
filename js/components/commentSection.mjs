@@ -1,5 +1,11 @@
 import { timePassed } from "../utils/timeUtils.mjs";
 
+/**
+ * @description Creates and returns a container for displaying comments and reactions.
+ * @param {Array<Object>} comments
+ * @param {Array<Object>} reactions
+ * @returns {HTMLDivElement}
+ */
 export function commentSection(comments, reactions) {
     const div = document.createElement("div");
     div.className = "comment-container";
@@ -9,6 +15,12 @@ export function commentSection(comments, reactions) {
     div.append(commentElements);
     return div;
 }
+
+/**
+ * @description Creates and returns a container for displaying reaction buttons based on the provided reaction data.
+ * @param {Array<Object>} reactions
+ * @returns {HTMLDivElement}
+ */
 function createReactElements(reactions) {
     const div = document.createElement("div");
     div.classList.add("bg-primary-subtle");
@@ -35,6 +47,11 @@ function createReactElements(reactions) {
     return div;
 }
 
+/**
+ * @description Creates and returns a container for displaying comments based on the provided comment data.
+ * @param {Array<Object>} comments
+ * @returns {HTMLDivElement}
+ */
 function createComments(comments) {
     const div = document.createElement("div");
     div.classList.add("bg-body", "p-3");
@@ -76,6 +93,11 @@ function createComments(comments) {
     return div;
 }
 
+/**
+ * @description Updates the reaction buttons within a specified container with new reaction data.
+ * @param {HTMLElement} container
+ * @param {Array<Object>} reactions
+ */
 export function updateReactions(container, reactions) {
     const item = container.querySelector(".bg-primary-subtle");
     const newItem = createReactElements(reactions);

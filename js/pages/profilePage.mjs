@@ -1,5 +1,9 @@
 import { putApiData } from "../services/apiServices.mjs";
 
+/**
+ * @description Displays profile information on the page.
+ * @param {Object} data
+ */
 export function displayProfile(data) {
 
     const avatar = document.querySelector("#user-avatar");
@@ -53,6 +57,11 @@ export function displayProfile(data) {
     displayFollow(data.data.following, testFollowing);
 }
 
+/**
+ * @description Displays the list of followers or following users.
+ * @param {Array} followers - The array of followers or following users.
+ * @param {NodeList} containers - The containers where the list of followers or following users will be displayed.
+ */
 function displayFollow(followers, containers) {
     Array.from(containers).forEach(container => {
         const amount = container.querySelector(".amount");
@@ -73,6 +82,11 @@ function displayFollow(followers, containers) {
     })
 }
 
+/**
+ * @description Checks if the current user is following a list of users.
+ * @param {Array} users
+ * @returns {boolean} - True if the current user is following any user in the list, otherwise false.
+ */
 function isFollowing(users) {
     const following = users.find((user) => {
         if (user.name === localStorage["name"]) {
@@ -82,6 +96,12 @@ function isFollowing(users) {
     return following;
 }
 
+/**
+ * @description Displays a list of users with their avatars and names.
+ * @param {Array} users
+ * @param {number} [amount=users.length] - The maximum number of users to display (defaults to the length of the users array).
+ * @returns {HTMLDivElement}
+ */
 function displayUsers(users, amount = users.length) {
     const div = document.createElement("div");
     for (let i = 0 ; i < amount ; i++) {
@@ -101,6 +121,11 @@ function displayUsers(users, amount = users.length) {
     return div;
 }
 
+/**
+ * @description Displays a modal for editing the user's profile details.
+ * @param {Object} avatar
+ * @param {Object} banner
+ */
 function editProfile(avatar, banner) {
     const editModal = new bootstrap.Modal(document.getElementById("edit-modal"))
     const modal = document.querySelector("#edit-modal");
@@ -129,7 +154,6 @@ function editProfile(avatar, banner) {
                 userBanner.style.backgroundSize = "auto 100%";
 
             }
-            //console.log(img.naturalWidth,img.naturalHeight);
         });
         userBanner.style.backgroundImage = `url(${bannerUrl.value})`;
     })
@@ -153,6 +177,14 @@ function editProfile(avatar, banner) {
     })
 }
 
+/**
+ * @description Retrieve metadata (such as natural width and height) of an image from its URL.
+ * @param {string} url - The URL of the image.
+ * @param {Function} cb - The callback function to be invoked when metadata retrieval is complete.
+ *                        The callback should accept two parameters: (err, img).
+ *                        - err: An error object if an error occurs during metadata retrieval, or null otherwise.
+ *                        - img: An Image object containing the metadata of the image.
+ */
 function getMeta(url,cb) {
     const img = new Image();
     img.onload = () => cb(null, img);

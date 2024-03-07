@@ -1,3 +1,8 @@
+/**
+ * @description Sorts the given array of posts by their popularity score and filters out posts older than 24 hours.
+ * @param {Array<Object>} data 
+ * @returns {Array<Object>}
+ */
 export function sortByTrending(data) {
     data.sort((a,b) => calculatePopularityScore(b) - calculatePopularityScore(a));
 
@@ -13,11 +18,21 @@ export function sortByTrending(data) {
     return filteredAllPosts;
 }
 
+/**
+ * @description Sorts the given array of data objects by their popularity score in descending order.
+ * @param {Array<Object>} data
+ * @returns {Array<Object>} Returns a sorted array of data objects by popularity score.
+ */
 export function sortByPopularity(data) {
     const newData = data.sort((a,b) => calculatePopularityScore(b) - calculatePopularityScore(a));
     return newData;
 }
 
+/**
+ * @description Calculates the count of tags in the provided array of posts and returns them sorted by count in descending order.
+ * @param {Array<Object>} posts
+ * @returns {Array<string>}
+ */
 export function getTagCount(posts) {
     const tagCount = {};
 
@@ -42,6 +57,13 @@ export function getTagCount(posts) {
     return sortedTags;
 }
 
+/**
+ * @description Calculates the popularity score of a post based on the number of comments and reactions it has.
+ * @param {Object} post
+ * @param {number} [post._count.comments=0]
+ * @param {number} [post._count.reactions=0]
+ * @returns {number}
+ */
 function calculatePopularityScore(post) {
     const comments = post._count.comments || 0;
     const reactions = post._count.reactions || 0;
