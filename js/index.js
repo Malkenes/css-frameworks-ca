@@ -1,4 +1,4 @@
-import { initializeFormValidation } from "./services/authService.mjs";
+import { initializeFormValidation } from "./services/authService.mjs"
 import { apiCall} from "./services/apiServices.mjs";
 import { displayFeed, getFeed } from "./pages/feed.mjs";
 import { displayProfile } from "./pages/profilePage.mjs";
@@ -6,6 +6,7 @@ import { displayLiveSearch, executeSearch} from "./components/search.mjs";
 import { displaySinglePost } from "./pages/post.mjs";
 import { displaySearchResults } from "./pages/search.mjs";
 import { createNewPost, editPost, addMedia, addTag, editTag, handlePostInteraction } from "./components/postHandler.mjs";
+
 
 if (localStorage["accessToken"]) {
     const apiName = await apiCall("/social/profiles/" + localStorage["name"]);
@@ -31,7 +32,6 @@ if (localStorage["accessToken"]) {
     if (searchParam) {
         displaySearchResults(searchParam);
     }
-
     const feed = document.querySelector("#feed");
     if (feed) {
         if (userParam) {
@@ -64,9 +64,11 @@ if (createPost) {
         createPost.classList.add("d-none");
     })
 
+
     closePostForm.addEventListener("click" , () => {
         postForm.classList.add("d-none");
         createPost.classList.remove("d-none");
+
     })
 }
 if (postForm) {
@@ -99,7 +101,6 @@ if (logoutBtn) {
         localStorage.clear();
         window.location.href = "../index.html";
     })
-}
 
 const searchResultContainer = document.querySelector("#search-results");
 if (searchResultContainer) {
@@ -110,3 +111,4 @@ const searchForm = document.querySelector("#search-form");
 if (searchForm) {
     searchForm.addEventListener("submit", executeSearch)
 }
+

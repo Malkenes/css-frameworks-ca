@@ -1,11 +1,11 @@
 import { putApiData } from "../services/apiServices.mjs";
 
+
 /**
  * @description Displays profile information on the page.
  * @param {Object} data
  */
 export function displayProfile(data) {
-
     const avatar = document.querySelector("#user-avatar");
     avatar.src = data.data.avatar.url;
     avatar.alt = data.data.avatar.alt;
@@ -56,6 +56,7 @@ export function displayProfile(data) {
     const testFollowing = document.querySelectorAll(".following");
     displayFollow(data.data.following, testFollowing);
 }
+
 
 /**
  * @description Displays the list of followers or following users.
@@ -121,6 +122,7 @@ function displayUsers(users, amount = users.length) {
     return div;
 }
 
+
 /**
  * @description Displays a modal for editing the user's profile details.
  * @param {Object} avatar
@@ -176,6 +178,7 @@ function editProfile(avatar, banner) {
         editModal.hide()
     })
 }
+
 
 /**
  * @description Retrieve metadata (such as natural width and height) of an image from its URL.
