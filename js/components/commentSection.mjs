@@ -1,5 +1,5 @@
 import { timePassed } from "../utils/timeUtils.mjs";
-
+import { apiCall } from "../services/apiServices.mjs";
 /**
  * @description Creates and returns a container for displaying comments and reactions.
  * @param {Array<Object>} comments
@@ -29,13 +29,13 @@ function createReactElements(reactions) {
     let frown = 0;
     reactions.filter((reaction) => {
         if (reaction.symbol === "💗") {
-            hearth = reaction.count;
+            hearth += reaction.count;
         }
         if (reaction.symbol === "😀") {
-            smile = reaction.count;
+            smile += reaction.count;
         }
         if (reaction.symbol === "🙁") {
-            frown = reaction.count;
+            frown += reaction.count;
         }
     });
     div.innerHTML = `
@@ -61,8 +61,7 @@ function createComments(comments) {
     </div>
     <div class="collapse bg-body mb-3">
         <form class="col comment-form d-flex align-items-stretch rounded-pill">
-            <div class="user-icon position-absolute"></div>
-            <textarea class="form-control rounded-start-pill ps-5" style="height: 48px;" aria-label="post a comment"></textarea>
+            <textarea class="form-control p-1" style="height: 48px;" aria-label="post a comment"></textarea>
             <div class="d-grid">
                 <button class="btn btn-primary comment-btn rounded-end-pill">Comment</button>
             </div>
@@ -101,5 +100,11 @@ function createComments(comments) {
 export function updateReactions(container, reactions) {
     const item = container.querySelector(".bg-primary-subtle");
     const newItem = createReactElements(reactions);
+    item.replaceWith(newItem);
+}
+export async function updateComments(container) {
+    const api = await apiCall(`/social/posts/${container.dataset.id}?_author=true&_reactions=true&_comments=true`);
+    const item = container.querySelector(".bg-body");
+    const newItem = createComments(api.data.comments);
     item.replaceWith(newItem);
 }

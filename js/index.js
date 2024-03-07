@@ -1,12 +1,11 @@
 import { initializeFormValidation } from "./services/authService.mjs";
-import { apiCall, deleteApiData, postApiData, putApiData } from "./services/apiServices.mjs";
-import { clearFeed, displayFeed, getFeed } from "./pages/feed.mjs";
+import { apiCall} from "./services/apiServices.mjs";
+import { displayFeed, getFeed } from "./pages/feed.mjs";
 import { displayProfile } from "./pages/profilePage.mjs";
 import { displayLiveSearch, executeSearch} from "./components/search.mjs";
 import { displaySinglePost } from "./pages/post.mjs";
 import { displaySearchResults } from "./pages/search.mjs";
-import { updateReactions } from "./components/commentSection.mjs";
-import { createNewPost, editPost, openPostEditor, addMedia, addTag, editTag } from "./components/postHandler.mjs";
+import { createNewPost, editPost, addMedia, addTag, editTag, handlePostInteraction } from "./components/postHandler.mjs";
 
 if (localStorage["accessToken"]) {
     const apiName = await apiCall("/social/profiles/" + localStorage["name"]);
@@ -23,19 +22,16 @@ if (localStorage["accessToken"]) {
     const queryString = document.location.search;
     const params = new URLSearchParams(queryString);
     const userParam = params.get("user");
+    const postParam = params.get("id");
+    const searchParam = params.get("search");
     if (userParam) {
         const userProfile = await apiCall("/social/profiles/" + userParam + "?_following=true&_followers=true");
         displayProfile(userProfile);
     }
-    const postParam = params.get("id");
-    if (postParam) {
-        //const postById = await apiCall("/social/posts/" + postParam + "?_author=true&_reactions=true&_comments=true");
-        //displaySinglePost(postById.data);
-    }
-    const searchParam = params.get("search");
     if (searchParam) {
         displaySearchResults(searchParam);
     }
+
     const feed = document.querySelector("#feed");
     if (feed) {
         if (userParam) {
@@ -47,43 +43,8 @@ if (localStorage["accessToken"]) {
         } else {
             getFeed();
         }
-        feed.addEventListener("click", function(e) {
-            const postContainer = e.target.closest("[data-id]");
-            const postId = postContainer.dataset.id;
-            if (e.target.classList.contains("react-btn")) {
-                const emoji = e.target.childNodes[0].nodeValue.trim();
-                async function reactToPost() {
-                    const testEmo = await putApiData(`/social/posts/${postId}/react/${emoji}`);
-                    updateReactions(postContainer, testEmo.data.reactions);
-                }
-                reactToPost();
-            }
-            if (e.target.classList.contains("toggle-comment-btn")) {
-                const commentContainer = e.target.closest(".comment-container");
-                const collapseElement = commentContainer.querySelector(".collapse");
-                collapseElement.classList.toggle("show");
-            }
-            if (e.target.classList.contains("delete-btn")) {
-                deleteApiData(`/social/posts/${postId}`);
-            }
-            if (e.target.classList.contains("edit-btn")) {
-                openPostEditor(postId);
-            }
-            if (e.target.classList.contains("comment-btn")) {
-                e.preventDefault();
-                const textarea = e.target.closest(".comment-form").querySelector("textarea");
-                const body = textarea.value;
-                postApiData(`/social/posts/${postId}/comment`,{body: body});
-            }
-            if (e.target.classList.contains("delete-comment-btn")) {
-                const comment = e.target.closest("[data-comment-id]");
-                const commentId = comment.dataset.commentId;
-                deleteApiData(`/social/posts/${postId}/comment/${commentId}`);
-            }
-        })
-        
+        feed.addEventListener("click", handlePostInteraction)        
     }
-   
 }
 
 const forms = document.querySelectorAll(".needs-validation");

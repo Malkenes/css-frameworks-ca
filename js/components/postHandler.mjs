@@ -1,5 +1,5 @@
-import { postApiData, apiCall, putApiData } from "../services/apiServices.mjs";
-
+import { postApiData, apiCall, putApiData, deleteApiData} from "../services/apiServices.mjs";
+import { updateReactions, updateComments } from "./commentSection.mjs";
 /**
  * @description Creates a new post with the provided data and sends it to the server.
  * @param {Event} event
@@ -206,4 +206,61 @@ let dublicateTag = (tags, tag) => {
     if (foundTag) {
         return true;
     }
+}
+/**
+ * @description Handles interactions (reactions, comments, deletion) on a post.
+ * @param {Event} e
+ * @returns {Promise<void>}
+ */
+export async function handlePostInteraction(e) {
+    const postContainer = e.target.closest("[data-id]");
+    const postId = postContainer.dataset.id;
+    if (e.target.classList.contains("react-btn")) {
+        const emoji = e.target.childNodes[0].nodeValue.trim();
+        async function reactToPost() {
+            const testEmo = await putApiData(`/social/posts/${postId}/react/${emoji}`);
+            updateReactions(postContainer, testEmo.data.reactions);
+        }
+        reactToPost();
+    }
+    if (e.target.classList.contains("toggle-comment-btn")) {
+        const commentContainer = e.target.closest(".comment-container");
+        const collapseElement = commentContainer.querySelector(".collapse");
+        collapseElement.classList.toggle("show");
+    }
+    if (e.target.classList.contains("delete-btn")) {
+        deleteApiData(`/social/posts/${postId}`);
+    }
+    if (e.target.classList.contains("edit-btn")) {
+        openPostEditor(postId);
+    }
+    if (e.target.classList.contains("comment-btn")) {
+        e.preventDefault();
+        const textarea = e.target.closest(".comment-form").querySelector("textarea");
+        const body = textarea.value;
+        postApiData(`/social/posts/${postId}/comment`,{body: body});
+        triggerDebounce(postContainer);
+    }
+    if (e.target.classList.contains("delete-comment-btn")) {
+        const comment = e.target.closest("[data-comment-id]");
+        const commentId = comment.dataset.commentId;
+        deleteApiData(`/social/posts/${postId}/comment/${commentId}`);
+        triggerDebounce(postContainer);
+    }
+
+}
+
+function debounce(func, delay) {
+    let timerId;
+    return function(...args) {
+      clearTimeout(timerId);
+      timerId = setTimeout(() => {
+        func.apply(this, args);
+      }, delay);
+    };
+}
+const updatetest = debounce(updateComments,300);
+
+function triggerDebounce(value) {
+    updatetest(value);
 }
