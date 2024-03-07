@@ -51,12 +51,11 @@ async function signIn(data) {
                 authError.textContent = "Incorrect Password";
             }
         } else {
-            window.location.href = "/profile/index.html";
+            const result = await response.json();
+            localStorage.setItem("accessToken", result.data.accessToken);
+            localStorage.setItem("name", result.data.name);    
+            window.location.href = "/profile/index.html?user=" + result.data.name;
         }
-
-        const result = await response.json();
-        localStorage.setItem("accessToken", result.data.accessToken);
-        localStorage.setItem("name", result.data.name);
 
     } catch (error) {
         console.log(error);

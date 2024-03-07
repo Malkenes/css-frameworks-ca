@@ -1,5 +1,11 @@
 import { timePassed } from "../utils/timeUtils.mjs";
-
+import { apiCall } from "../services/apiServices.mjs";
+/**
+ * @description Creates and returns a container for displaying comments and reactions.
+ * @param {Array<Object>} comments
+ * @param {Array<Object>} reactions
+ * @returns {HTMLDivElement}
+ */
 export function commentSection(comments, reactions) {
     const div = document.createElement("div");
     div.className = "comment-container";
@@ -9,33 +15,43 @@ export function commentSection(comments, reactions) {
     div.append(commentElements);
     return div;
 }
+
+/**
+ * @description Creates and returns a container for displaying reaction buttons based on the provided reaction data.
+ * @param {Array<Object>} reactions
+ * @returns {HTMLDivElement}
+ */
 function createReactElements(reactions) {
     const div = document.createElement("div");
     div.classList.add("bg-primary-subtle");
-    //console.log(data.reactions);
     let hearth = 0;
     let smile = 0;
     let frown = 0;
     reactions.filter((reaction) => {
         if (reaction.symbol === "💗") {
-            hearth = reaction.count;
+            hearth += reaction.count;
         }
         if (reaction.symbol === "😀") {
-            smile = reaction.count;
+            smile += reaction.count;
         }
         if (reaction.symbol === "🙁") {
-            frown = reaction.count;
+            frown += reaction.count;
         }
     });
     div.innerHTML = `
-    <button class="btn react-btn fs-3 position-relative">💗<span class="position-absolute top-0 start-100 translate-middle badge bg-danger">${hearth}</span></button>
-    <button class="btn react-btn fs-3 position-relative">😀<span class="position-absolute top-0 start-100 translate-middle badge bg-danger">${smile}</span></button>
-    <button class="btn react-btn fs-3 position-relative">🙁<span class="position-absolute top-0 start-100 translate-middle badge bg-danger">${frown}</span></button>
+    <button class="btn react-btn fs-5 position-relative">💗<span class="position-absolute top-0 end-0 badge bg-secondary">${hearth}</span></button>
+    <button class="btn react-btn fs-5 position-relative">😀<span class="position-absolute top-0 end-0 badge bg-secondary">${smile}</span></button>
+    <button class="btn react-btn fs-5 position-relative">🙁<span class="position-absolute top-0 end-0 badge bg-secondary">${frown}</span></button>
     <button class="btn toggle-comment-btn">Reply</button>
     `;
     return div;
 }
 
+/**
+ * @description Creates and returns a container for displaying comments based on the provided comment data.
+ * @param {Array<Object>} comments
+ * @returns {HTMLDivElement}
+ */
 function createComments(comments) {
     const div = document.createElement("div");
     div.classList.add("bg-body", "p-3");
@@ -45,8 +61,7 @@ function createComments(comments) {
     </div>
     <div class="collapse bg-body mb-3">
         <form class="col comment-form d-flex align-items-stretch rounded-pill">
-            <div class="user-icon position-absolute"></div>
-            <textarea class="form-control rounded-start-pill ps-5" style="height: 48px;" aria-label="post a comment"></textarea>
+            <textarea class="form-control p-1" style="height: 48px;" aria-label="post a comment"></textarea>
             <div class="d-grid">
                 <button class="btn btn-primary comment-btn rounded-end-pill">Comment</button>
             </div>
@@ -77,3 +92,19 @@ function createComments(comments) {
     return div;
 }
 
+/**
+ * @description Updates the reaction buttons within a specified container with new reaction data.
+ * @param {HTMLElement} container
+ * @param {Array<Object>} reactions
+ */
+export function updateReactions(container, reactions) {
+    const item = container.querySelector(".bg-primary-subtle");
+    const newItem = createReactElements(reactions);
+    item.replaceWith(newItem);
+}
+export async function updateComments(container) {
+    const api = await apiCall(`/social/posts/${container.dataset.id}?_author=true&_reactions=true&_comments=true`);
+    const item = container.querySelector(".bg-body");
+    const newItem = createComments(api.data.comments);
+    item.replaceWith(newItem);
+}

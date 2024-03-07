@@ -1,7 +1,11 @@
 import { timePassed } from "../utils/timeUtils.mjs";
 import { showAll } from "../pages/feed.mjs";
 
-
+/**
+ * @description Creates and displays a post element based on the provided data.
+ * @param {Object} data
+ * @returns {HTMLDivElement}
+ */
 export function displayPost(data) {
     const post = document.createElement("div");
     const header = createPostHeader(data);
@@ -11,9 +15,14 @@ export function displayPost(data) {
     return post;
 }
 
+/**
+ * @description Creates and returns the header element for a post based on the provided data.
+ * @param {Object} data
+ * @returns {HTMLDivElement}
+ */
 function createPostHeader(data) {
     const header = document.createElement("div");
-    header.classList.add("border-bottom");
+    header.classList.add("border-bottom", "mb-3");
     header.innerHTML = `
     <div class="d-flex gap-2 align-items-center">
         <a href="../profile/index.html?user=${data.author.name}">
@@ -34,16 +43,16 @@ function createPostHeader(data) {
         editBtn.textContent = "Edit";
         deleteBtn.textContent = "delete";
         div.append(editBtn, deleteBtn);
-        //edit.onclick = function() {
-        //    editPost(data);
-        //}
-        //edit.textContent = "edit";
-        //edit.dataset.id = data.id;
         header.append(div);
     }
     return header;
 }
 
+/**
+ * @description Creates and returns the body element for a post based on the provided data.
+ * @param {Object} data
+ * @returns {HTMLDivElement}
+ */
 function createPostBody(data) {
     const body = document.createElement("div");
     body.innerHTML = `
@@ -52,7 +61,7 @@ function createPostBody(data) {
     const div = document.createElement("div");
     const buttonContainer = document.createElement("div");
     div.innerHTML = data.body;
-    div.classList.add("content");
+    div.classList.add("content", "mb-3");
     div.style.maxHeight = "200px";
     div.style.overflow = "hidden";
     const button = document.createElement("button");
@@ -76,6 +85,13 @@ function createPostBody(data) {
     return body;
 }
 
+/**
+ * @description Creates and returns a media element (such as an image) based on the provided media data.
+ * @param {Object} media
+ * @param {string} media.url
+ * @param {string} media.alt
+ * @returns {HTMLDivElement}
+ */
 function createMediaElement(media) {
     const div = document.createElement("div");
     div.classList.add("text-center", "mb-3");
@@ -87,6 +103,11 @@ function createMediaElement(media) {
     return div;
 }
 
+/**
+ * @description Creates and returns a container for displaying tags based on the provided tag data.
+ * @param {Array<string>} tags
+ * @returns {HTMLDivElement}
+ */
 function createTagsElement(tags) {
     const div = document.createElement("div");
     div.classList.add("d-flex", "gap-2", "mb-3");

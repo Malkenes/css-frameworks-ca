@@ -18,12 +18,6 @@
                 <a class="navbar-brand" href="#">
                     <img src="../images/logo.png" style="width: 48px;" alt="FriendLink">
                 </a>
-                <form role="search" class="position-relative">
-                    <button class="position-absolute top-50 start-0 translate-middle-y btn" aria-label="search">
-                        <i class="fas fa-magnifying-glass"></i>
-                    </button>
-                    <input type="search" class="form-control ps-5" placeholder="Search" aria-label="search field">
-                </form>
                 <div>
                     <button class="btn btn-outline-danger btn-sm" id="logout-btn">logout</button>
                     <a class="user-profile-link">
@@ -37,8 +31,8 @@
         <h1 class="sr-only">FriendLink Feed</h1>
         <div class="container">
             <div class="row">
-                <div class="offcanvas-lg offcanvas-start custom-offcanvas col-lg-3" id="offcanvasResponsive">
-                    <h2 class="text-center bg-primary list-group-item mt-2">Filters</h2>
+                <div class="offcanvas-lg offcanvas-start custom-offcanvas col-lg-3 col-xxl-2" id="offcanvasResponsive">
+                    <h2 class="text-center bg-primary list-group-item mt-2 fs-3">Filters</h2>
                     <ul class="list-group">
                         <li class="list-group-item list-group-item-action">
                             <button class="btn">
@@ -57,8 +51,26 @@
                             </button>
                         </li>
                     </ul>
+                    <h2 class="text-center bg-primary list-group-item mt-2 fs-3">Popular Tags</h2>
+                    <ul class="list-group" id="tag-selection">
+
+                    </ul>
                 </div>
-                <div class="col-lg-7">
+                <div class="col-lg-9 col-xl-6 offset-xl-1">
+                    <div class="position-relative mb-3">
+                        <form role="search" class="position-relative" id="search-form">
+                            <button class="position-absolute top-50 start-0 translate-middle-y btn" aria-label="search">
+                                <i class="fas fa-magnifying-glass"></i>
+                            </button>
+                            <input type="search" class="form-control ps-5" placeholder="Search" aria-label="search field" id="search-input">
+                        </form>
+                        <div class="position-absolute bg-white border border-top-0 border-dark-subtle w-100 collapse p-2 z-3" id="search-results">
+                            <span>Posts</span>
+                            <ul id="post-list"></ul> 
+                            <span>Profiles</span>
+                            <ul id="profile-list"></ul>
+                        </div>
+                    </div>    
                     <div class="d-grid">
                         <button class="mb-3 bg-white rounded-start-pill d-flex p-0 border border-0 align-items-center" id="create-post">
                             <img class="user-icon-lg user-profile">
@@ -101,18 +113,18 @@
                             </form>
                         </div>
                     </div>
-                    <ul class="nav nav-underline mb-3 p-2 bg-white">
+                    <ul class="nav nav-underline mb-3 p-2 bg-white" id="myTab">
                         <li class="d-lg-none nav-item">
                             <button class="nav-link" data-bs-toggle="offcanvas" data-bs-target="#offcanvasResponsive"><i class="fas fa-filter"></i> Filter</button>
                         </li>
                         <li class="nav-item">
-                            <button class="nav-link active"><i class="fas fa-chart-line"></i> Trending</button>
+                            <button class="nav-link active" id="trending"><i class="fas fa-chart-line"></i> Trending</button>
                         </li>
                         <li class="nav-item">
-                            <button class="nav-link"><i class="fas fa-clock-rotate-left"></i> Recent</button>
+                            <button class="nav-link" id="recent"><i class="fas fa-clock-rotate-left"></i> Recent</button>
                         </li>
                         <li class="nav-item">
-                            <button class="nav-link"><i class="fas fa-arrow-up"></i> Popular</button>
+                            <button class="nav-link" id="popular"><i class="fas fa-arrow-up"></i> Popular</button>
                         </li>
                     </ul>
                     <div class="mb-3" id="feed">
