@@ -101,7 +101,7 @@ if (logoutBtn) {
         localStorage.clear();
         window.location.href = "../index.html";
     })
-
+}
 const searchResultContainer = document.querySelector("#search-results");
 if (searchResultContainer) {
     displayLiveSearch();
