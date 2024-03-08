@@ -1,24 +1,36 @@
 <p align="center">
-    <img src="images/Logo.png" width="50%">
+    <img src="images/logo.png" width="50%">
 </p>
 <h1 align="center">FriendLink</h1>
-<p align="center">A Static web social media application</p>
+<p align="center">A social media application, where you can effortlessly connect with others through a range of features</p>
 
 ## Features
 
-* Profile page
-    - showing your profile and your posts
+* Post managment
+    - Create, edit, and delete posts to share your thoughts and experiences.
+
+* Reaction System 
+    - Express your feelings with a variety of reaction icons for posts.
+
+* Commenting
+    - Engage in conversations by leaving comments on posts.
+
+* Search Functionality
+    - Easily find users and posts by title with our intuitive search feature.
+
+* Profile Customization
+    - Personalize your profile by updating your image and banner.
 
 * Responsive design
     - Desktop, tablet and mobile friendly across most common browsers
     
 ## Demo
-Figma Prototypes
-- [Mobile](https://www.figma.com/proto/HtvWXS4I3o5pnIGFNyv2NY/FriendLink?type=design&node-id=2-37&t=b0oCfkt4D4vnbGkv-1&scaling=scale-down&page-id=2%3A35&starting-point-node-id=2%3A36&mode=design)
-- [Desktop](https://www.figma.com/proto/HtvWXS4I3o5pnIGFNyv2NY/FriendLink?type=design&node-id=13-4&t=O8xADYAZgqsdzDGb-1&scaling=scale-down&page-id=13%3A2&starting-point-node-id=13%3A3&mode=design)
+
+[live demo](https://strong-sprinkles-75871e.netlify.app/)
 ## Built With
 - Bootstrap
 - SASS
+- Javascript
 
 ## How to Use
 
@@ -37,12 +49,15 @@ cd css-frameworks-ca
 # Install dependencies
 npm install
 
+# Compile Sass
+npm run build
+
 ```
 ### Development
 
 To run the application in development mode 
 ```bash
-npm start
+npm run dev
 ```
 
 ## Contact
