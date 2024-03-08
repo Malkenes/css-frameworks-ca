@@ -6,6 +6,7 @@ import { displayLiveSearch, executeSearch} from "./components/search.mjs";
 import { displaySinglePost } from "./pages/post.mjs";
 import { displaySearchResults } from "./pages/search.mjs";
 import { createNewPost, editPost, addMedia, addTag, editTag, handlePostInteraction } from "./components/postHandler.mjs";
+import "../node_modules/bootstrap/dist/js/bootstrap.bundle.min.js";
 
 
 if (localStorage["accessToken"]) {
