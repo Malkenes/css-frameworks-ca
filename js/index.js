@@ -1,5 +1,5 @@
 import { initializeFormValidation } from "./services/authService.mjs"
-import { apiCall} from "./services/apiServices.mjs";
+import { apiCall, putApiData} from "./services/apiServices.mjs";
 import { displayFeed, getFeed } from "./pages/feed.mjs";
 import { displayProfile } from "./pages/profilePage.mjs";
 import { displayLiveSearch, executeSearch} from "./components/search.mjs";
@@ -19,7 +19,6 @@ if (localStorage["accessToken"]) {
     Array.from(userLink).forEach(link => {
         link.href = "../profile/index.html?user=" + localStorage["name"];
     })
-
     const queryString = document.location.search;
     const params = new URLSearchParams(queryString);
     const userParam = params.get("user");

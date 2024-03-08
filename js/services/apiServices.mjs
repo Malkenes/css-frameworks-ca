@@ -62,8 +62,16 @@ export async function postApiData(endpoint, data = {}) {
         },
         body: JSON.stringify(data)
     }
-    const response = await fetch (`${NOROFF_API_URL}${endpoint}`, options)
-    return response.json();
+    try {
+        const response = await fetch (`${NOROFF_API_URL}${endpoint}`, options)
+        if (!response.ok) {
+            throw new Error(`HTTP error! Status: ${response.status}`);
+        } else {
+            return response.json();
+        }
+    } catch (error) {
+        
+    }
 }
 
 /**
@@ -83,9 +91,17 @@ export async function putApiData(endpoint, data = {}) {
         },
         body: JSON.stringify(data)
     }
-    const response = await fetch (`${NOROFF_API_URL}${endpoint}`, options)
-    return response.json();
-
+    try {
+        const response = await fetch (`${NOROFF_API_URL}${endpoint}`, options)
+        if (!response.ok) {
+            throw new Error(`HTTP error! Status: ${response.status}`);
+        } else {
+            return response.json();
+        }
+    
+    } catch (error) {
+        console.log(error);
+    }
 }
 
 /**
@@ -105,5 +121,14 @@ export async function deleteApiData(endpoint, data = {}) {
         },
         body: JSON.stringify(data)
     }
-    const response = await fetch (`${NOROFF_API_URL}${endpoint}`, options)
+    try {
+        const response = await fetch (`${NOROFF_API_URL}${endpoint}`, options)
+        if (!response.ok) {
+            throw new Error(`HTTP error! Status: ${response.status}`);
+        } else {
+            location.reload();
+        }
+    } catch (error) {
+        
+    }
 }

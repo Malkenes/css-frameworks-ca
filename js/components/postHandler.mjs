@@ -36,10 +36,14 @@ export async function createNewPost(event) {
 
     try {
         const response = await postApiData("/social/posts", dataPackage);
-        if (response.ok) {
-            console.log("worked");
+        if (response) {
+            location.reload();
         } else {
-            console.log("failed");
+            const postError = document.querySelector("#post-error");
+            if (body.length > 160) {
+                postError.textContent = "body to long";
+            }
+            postError.style.display = "block";
         }
     
     } catch (error) {
@@ -118,9 +122,18 @@ export async function editPost(event) {
     if (tagsByName) {
         dataPackage.tags = tagsByName;
     }
-    putApiData(`/social/posts/${postId}`, dataPackage);
-    console.log(dataPackage);
-    console.log(postId);
+    try {
+        const response = await putApiData(`/social/posts/${postId}`, dataPackage);
+        if (response) {
+            location.reload();
+        } else {
+            const authError = document.querySelector("#auth-error");
+            authError.style.display = "block";
+        }
+
+    } catch (error) {
+        
+    }
 }
 
 /**
