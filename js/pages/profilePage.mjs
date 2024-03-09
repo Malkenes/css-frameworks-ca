@@ -1,11 +1,27 @@
-import { putApiData } from "../services/apiServices.mjs";
+import { putApiData, apiCall } from "../services/apiServices.mjs";
+import { displayError, hideLoadingSpinner, showLoadingSpinner } from "../utils/feedbackUtils.mjs";
+import { displayFeed } from "./feed.mjs";
 
+export async function getProfile(param) {
+    try {
+        showLoadingSpinner();
+        const userProfile = await apiCall("/social/profiles/" + param + "?_following=true&_followers=true");
+        displayProfile(userProfile);
+        const apiData = await apiCall(`/social/profiles/${param}/posts` +"?_author=true&_reactions=true&_comments=true");
+        displayFeed(apiData.data);
+        hideLoadingSpinner();
+    } catch (error) {
+        console.log(error);
+        displayError();
+        hideLoadingSpinner();
+    }
+}
 
 /**
  * @description Displays profile information on the page.
  * @param {Object} data
  */
-export function displayProfile(data) {
+function displayProfile(data) {
     const avatar = document.querySelector("#user-avatar");
     avatar.src = data.data.avatar.url;
     avatar.alt = data.data.avatar.alt;

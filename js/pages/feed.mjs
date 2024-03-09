@@ -2,6 +2,7 @@ import { commentSection } from "../components/commentSection.mjs";
 import { displayPost } from "../components/postList.mjs";
 import { sortByPopularity, sortByTrending, getTagCount } from "../components/sort.mjs";
 import { apiCall } from "../services/apiServices.mjs";
+import { showLoadingSpinner, hideLoadingSpinner, displayError } from "../utils/feedbackUtils.mjs";
 
 /**
  * @description Retrieves and displays the feed of posts, including options for sorting and filtering.
@@ -10,67 +11,86 @@ import { apiCall } from "../services/apiServices.mjs";
 export async function getFeed() {
     const postPerPage = 10;
     let currentPage = 1;
-    const data = await getAllPosts();
-    const originalData = [...data];
-    let dataCopy = sortByTrending(data);
-
-
-    window.onscroll = function() {
-        if (window.innerHeight + window.scrollY >= document.body.scrollHeight - 20) {
-            currentPage += 1;
-            const startIndex = (currentPage - 1) * postPerPage;
-            const endIndex = startIndex + postPerPage;
-            displayFeed(dataCopy.slice(startIndex,endIndex));
+    try {
+        showLoadingSpinner();
+        const data = await getAllPosts();
+        const originalData = [...data];
+        let dataCopy = sortByTrending(data);
+    
+    
+        window.onscroll = function() {
+            if (window.innerHeight + window.scrollY >= document.body.scrollHeight - 20) {
+                currentPage += 1;
+                const startIndex = (currentPage - 1) * postPerPage;
+                const endIndex = startIndex + postPerPage;
+                displayFeed(dataCopy.slice(startIndex,endIndex));
+            }
         }
-    }
-
-    const trending = document.querySelector("#trending");
-    trending.addEventListener("click", () => {
-        dataCopy = sortByTrending(data);
-        clearFeed();
-        displayFeed(dataCopy.slice(0,10));
-        setActive(trending);
-    })
-    const recent = document.querySelector("#recent");
-    recent.addEventListener("click", () => {
-        dataCopy = originalData;
-        clearFeed();
-        displayFeed(dataCopy.slice(0,10));
-        setActive(recent);
-    })
-    const popular = document.querySelector("#popular");
-    popular.addEventListener("click", () => {
-        dataCopy = sortByPopularity(data);
-        console.log(originalData);
-        clearFeed();
-        displayFeed(dataCopy.slice(0,10));
-        setActive(popular);
-    })
-
-    const TagSelection = document.querySelector("#tag-selection");
-    const popularTags = getTagCount(data);
-    for (let i = 0; i < 10; i++) {
-        const tagElement = document.createElement("li");
-        tagElement.classList.add("list-group-item", "list-group-item-action");
-        if (i % 2) {
-            tagElement.classList.add("list-group-item-primary");
-        }
-        const tagButton = document.createElement("button");
-        tagButton.classList.add("btn");
-        tagButton.textContent = popularTags[i];
-        
-        tagButton.onclick = async function() {
-            const apiData = await apiCall("/social/posts?_author=true&_reactions=true&_comments=true&_tag=" + tagButton.textContent);
+    
+        const trending = document.querySelector("#trending");
+        trending.addEventListener("click", () => {
+            dataCopy = sortByTrending(data);
             clearFeed();
-            dataCopy = apiData.data;
             displayFeed(dataCopy.slice(0,10));
+            setActive(trending);
+        })
+        const recent = document.querySelector("#recent");
+        recent.addEventListener("click", () => {
+            dataCopy = originalData;
+            clearFeed();
+            displayFeed(dataCopy.slice(0,10));
+            setActive(recent);
+        })
+        const popular = document.querySelector("#popular");
+        popular.addEventListener("click", () => {
+            dataCopy = sortByPopularity(data);
+            clearFeed();
+            displayFeed(dataCopy.slice(0,10));
+            setActive(popular);
+        })
+    
+        const TagSelection = document.querySelector("#tag-selection");
+        const popularTags = getTagCount(data);
+        const bsOffcanvas = new bootstrap.Offcanvas("#offcanvasResponsive");
+        for (let i = 0; i < 10; i++) {
+            const tagElement = document.createElement("li");
+            tagElement.classList.add("list-group-item", "list-group-item-action");
+            if (i % 2) {
+                tagElement.classList.add("list-group-item-primary");
+            }
+            const tagButton = document.createElement("button");
+            tagButton.classList.add("btn");
+            tagButton.textContent = popularTags[i];
+            
+            tagButton.onclick = async function() {
+                clearFeed();
+                bsOffcanvas.hide();
+                try {
+                    showLoadingSpinner();
+                    const apiData = await apiCall("/social/posts?_author=true&_reactions=true&_comments=true&_tag=" + tagButton.textContent);
+                    dataCopy = apiData.data;
+                    displayFeed(dataCopy.slice(0,10));    
+                    hideLoadingSpinner();
+                } catch (error) {
+                    console.log(error);
+                    displayError();
+                    hideLoadingSpinner();
+                }
+            }
+            
+            tagElement.append(tagButton);
+            TagSelection.append(tagElement);
         }
-        
-        tagElement.append(tagButton);
-        TagSelection.append(tagElement);
-    }
+    
+        displayFeed(dataCopy.slice(0,10));
 
-    displayFeed(dataCopy.slice(0,10));
+        hideLoadingSpinner();
+            
+    } catch (error) {
+        console.log(error);
+        displayError();
+        hideLoadingSpinner();
+    }
 }
 
 /**

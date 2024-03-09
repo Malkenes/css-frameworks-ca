@@ -111,7 +111,12 @@
                         </form>
                     </div>
                     <div class="mb-3" id="feed"></div>
-                </div>
+                    <div class="spinner-border d-none" id="loading-spinner" role="status">
+                        <span class="visually-hidden">Loading...</span>
+                    </div>
+                    <div class="alert alert-danger d-none" id="display-error" role="alert">
+                        Oops! Something went wrong. Please refresh the page and try again.
+                    </div>    
             </div>
         </div>
         <div id="myModal" class="modal fade" tabindex="-1">

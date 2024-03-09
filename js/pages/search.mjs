@@ -1,4 +1,5 @@
 import { apiCall } from "../services/apiServices.mjs";
+import { displayError, hideLoadingSpinner, showLoadingSpinner } from "../utils/feedbackUtils.mjs";
 
 /**
  * @description Displays search results for posts and profiles based on the provided search parameter.
@@ -34,8 +35,8 @@ export function displaySearchResults(param) {
     */
     async function displayResults(endpoint, data, page) {
         try {
+            showLoadingSpinner();
             const searchResult = await apiCall(endpoint + "&page=" + page);
-            console.log(searchResult);
             if (searchResult.meta.isLastPage) {
                 nextPage.disabled = true;
             } else {
@@ -69,9 +70,12 @@ export function displaySearchResults(param) {
                 searchItem.append(searchText);
                 searchResults.append(searchItem);
             })
+            hideLoadingSpinner();
     
         } catch (error) {
             console.log("error");
+            displayError();
+            hideLoadingSpinner();
         }
     }
 

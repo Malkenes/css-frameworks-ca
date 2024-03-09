@@ -68,7 +68,7 @@ function createComments(comments) {
         </form>
     </div>
     `;
-    Array.from(comments).forEach(comment => {
+    Array.from(comments).reverse().forEach(comment => {
         const com = document.createElement("div");
         com.dataset.commentId = comment.id;
         com.innerHTML = `

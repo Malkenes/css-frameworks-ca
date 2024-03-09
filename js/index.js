@@ -1,7 +1,7 @@
 import { initializeFormValidation } from "./services/authService.mjs"
-import { apiCall, putApiData} from "./services/apiServices.mjs";
-import { displayFeed, getFeed } from "./pages/feed.mjs";
-import { displayProfile } from "./pages/profilePage.mjs";
+import { apiCall} from "./services/apiServices.mjs";
+import { getFeed } from "./pages/feed.mjs";
+import { getProfile } from "./pages/profilePage.mjs";
 import { displayLiveSearch, executeSearch} from "./components/search.mjs";
 import { displaySinglePost } from "./pages/post.mjs";
 import { displaySearchResults } from "./pages/search.mjs";
@@ -25,8 +25,7 @@ if (localStorage["accessToken"]) {
     const postParam = params.get("id");
     const searchParam = params.get("search");
     if (userParam) {
-        const userProfile = await apiCall("/social/profiles/" + userParam + "?_following=true&_followers=true");
-        displayProfile(userProfile);
+        getProfile(userParam);
     }
     if (searchParam) {
         displaySearchResults(searchParam);
@@ -34,11 +33,10 @@ if (localStorage["accessToken"]) {
     const feed = document.querySelector("#feed");
     if (feed) {
         if (userParam) {
-            const apiData = await apiCall(`/social/profiles/${userParam}/posts` +"?_author=true&_reactions=true&_comments=true");
-            displayFeed(apiData.data);
+            //const apiData = await apiCall(`/social/profiles/${userParam}/posts` +"?_author=true&_reactions=true&_comments=true");
+            //displayFeed(apiData.data);
         } else if (postParam) {
-            const postById = await apiCall("/social/posts/" + postParam + "?_author=true&_reactions=true&_comments=true");
-            displaySinglePost(postById.data);    
+            displaySinglePost(postParam);    
         } else {
             getFeed();
         }
