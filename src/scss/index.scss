@@ -22,13 +22,15 @@
   @extend .rounded-circle;
   @extend .border;
   @extend .border-primary;
+  @extend .object-fit-cover;
   width: 48px;
   height: 48px;
 
   &-sm {
     @extend .rounded-circle;
     @extend .border;
-    @extend .border-primary;  
+    @extend .border-primary;
+    @extend .object-fit-cover;  
     width: 24px;
     height: 24px
   }
@@ -37,14 +39,19 @@
     @extend .rounded-circle;
     @extend .border;
     @extend .border-primary;  
+    @extend .object-fit-cover;
     width: 96px;
-    height: 96px
+    height: 96px;
   }
   &-xl {
     @extend .rounded-circle;
     @extend .border;
     @extend .border-primary;  
+    @extend .object-fit-cover;
     width: 192px;
+    height: 192px;
+    filter: drop-shadow(0 0 4px $primary);
+
   }
 }
 .fa-heart {
@@ -56,4 +63,8 @@
   @extend .rounded-circle;
   color: $yellow-500;
   background: black;
+}
+
+#followers h3, #following h3 {
+  display: none;
 }

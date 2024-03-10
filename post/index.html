@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FriendLink | Post</title>
+    <meta name="description" content="the loop with what matters most.">
+    <link rel="stylesheet" href="../dist/css/index.css">
+    <script src="https://kit.fontawesome.com/6a870feefe.js" crossorigin="anonymous"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Nunito+Sans:ital,opsz,wght@0,6..12,200..1000;1,6..12,200..1000&display=swap" rel="stylesheet">
+</head>
+<body>
+    <header>
+        <nav class="navbar container">
+            <div class="container-fluid">
+                <a class="navbar-brand" href="../feed/index.html">
+                    <img src="../images/logo.png" style="width: 48px;" alt="FriendLink">
+                </a>
+                <div>
+                    <button class="btn btn-outline-danger btn-sm" id="logout-btn">logout</button>
+                    <a class="user-profile-link">
+                        <img src="../images/logo.png" class="user-icon align-item-end user-profile" alt="profile">
+                    </a>    
+                </div>
+            </div>
+        </nav>
+    </header>
+    <main>
+        <div class="container mb-5">
+            <div class="col-lg-6 offset-lg-3">
+                <div id="post"></div>
+                <div class="spinner-border d-none" id="loading-spinner" role="status">
+                    <span class="visually-hidden">Loading...</span>
+                </div>
+                <div class="alert alert-danger d-none" id="display-error" role="alert">
+                    Oops! Something went wrong. Please refresh the page and try again.
+                </div>    
+            </div>
+        </div>
+        <div id="myModal" class="modal" tabindex="-1">
+            <div class="modal-dialog">
+              <div class="modal-content">
+                <form class="col align-items-stretch mb-3 p-3 bg-white" id="edit-form">
+                    <div class="mb-3 d-flex align-items-center gap-2">
+                        <img class="user-icon user-profile">
+                        <input class="form-control" placeholder="Title" name="title" aria-label="create a post" id="edit-title-input" required></input>
+                        <button type="button" class="btn-close" id="close-postform" aria-label="close"></button>
+                    </div>
+                    <div class="mb-3">
+                        <textarea class="form-control" name="body" rows="10" id="edit-body-input"></textarea>
+                    </div>
+                    <div class="mb-3">
+                        <label for="media-url-input">Media url</label>
+                        <input type="url" name="url" class="form-control" id="edit-media-url-input">
+                        <div class="text-center">
+                            <img class="img-fluid" id="edit-placeholder-image">
+                        </div>
+                        <label for="media-alt-input">Alt text</label>
+                        <input type="text" name="alt" class="form-control" id="edit-media-alt-input">
+                    </div>
+                    <div class="mb-3">
+                        <label for="tags-input" class="form-label">Tags</label>
+                        <input type="text" id="edit-tags-input">
+                        <button type="button" class="btn btn-secondary" id="edit-add-tag">add</button>
+                        <div class="d-flex flex-wrap gap-2" id="edit-added-tags"></div>
+                    </div>
+                    <div class="d-grid mb-3">
+                        <button class="btn btn-primary">Edit</button>
+                    </div>
+                </form>
+                <div id="auth-error" class="invalid-feedback">Something went wrong!</div>
+              </div>
+            </div>
+          </div>
+
+    </main>
+    <script src="../js/bootstrap.bundle.min.js"></script>
+    <script type="module" src="../js/index.js"></script>
+
+</body>
+</html>

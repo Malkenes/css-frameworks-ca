@@ -18,15 +18,12 @@
                 <a class="navbar-brand" href="../feed/index.html">
                     <img src="../images/logo.png" style="width: 48px;" alt="FriendLink">
                 </a>
-                <form role="search" class="position-relative">
-                    <button class="position-absolute top-50 start-0 translate-middle-y btn" aria-label="search">
-                        <i class="fas fa-magnifying-glass"></i>
-                    </button>
-                    <input type="search" class="form-control ps-5" placeholder="Search" aria-label="search field">
-                </form>
-                <a href="">
-                    <img src="../images/logo.png" style="width: 48px;" class="rounded-circle border border-primary align-item-end" alt="Profile">
-                </a>    
+                <div>
+                    <button class="btn btn-outline-danger btn-sm" id="logout-btn">logout</button>
+                    <a class="user-profile-link">
+                        <img src="../images/logo.png" class="user-icon align-item-end user-profile" alt="profile">
+                    </a>    
+                </div>
             </div>
         </nav>
     </header>
@@ -34,320 +31,208 @@
         <div class="container">
             <div class="row">
                 <div class="col-lg-4 col-xl-3 mb-3">
-                    <div class="d-flex flex-column align-items-center custom-bg p-3">
+                    <div class="d-flex flex-column align-items-center p-3 gap-2" id="banner">
                         <div class="position-relative">
-                            <img src="../images/logo.png" class="user-icon-xl" alt="">
-                            <button class="position-absolute top-0 end-0 btn btn-primary">Follow</button>
+                            <img src="../images/logo.png" class="user-icon-xl shadow-lg" id="user-avatar">
+                            <button class="position-absolute top-0 end-0 btn btn-primary" id="followOrEdit">Follow</button>
                         </div>
-                        <h1>User Name</h1>
-                        <p>Quick description of you</p>
+                        <div class="bg-light bg-opacity-50 p-2 text-center">
+                            <h1 class="m-0">User Name</h1>
+                        </div>
                     </div>
                     <div class="bg-primary rounded-5 rounded-top-0 p-3">
-                        <div class="row text-center">
-                            <div class="col mb-3">
+                        <div id="bio"></div>
+                        <div class="d-flex d-lg-block text-center">
+                            <div class="col mb-3 followers" id="followers">
                                 <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#followersModal">Followers
-                                    <span>40</span>
+                                    <span class="amount"></span>
                                 </button>
-                                <div class="d-none d-lg-flex gap-2">
-                                    <div class="user-icon bg-white"></div>
-                                    <div class="user-icon bg-white"></div>
-                                    <div class="user-icon bg-white"></div>
-                                    <div class="user-icon bg-white"></div>
-                                </div>
                             </div>
-                            <div class="col mb-3">
+                            <div class="col mb-3 following" id="following">
                                 <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#followingModal">Following
-                                    <span>300</span>
+                                    <span class="amount"></span>
                                 </button>
-                                <div class="d-none d-lg-flex gap-2">
-                                    <div class="user-icon bg-white"></div>
-                                    <div class="user-icon bg-white"></div>
-                                    <div class="user-icon bg-white"></div>
-                                    <div class="user-icon bg-white"></div>
-                                </div>
                             </div>
                         </div>
                         <div class="d-grid shadow-lg">
-                            <button class="btn btn-secondary" data-bs-toggle="collapse" data-bs-target="#collapseOne" >Write a new post</button>
+                            <button class="d-none btn btn-secondary" data-bs-toggle="collapse" data-bs-target="#collapseOne" id="create-posts" >Write a new post</button>
                         </div>
                     </div>
                 </div>
                 <div class="col-lg-8 col-xl-7">
+                    <div class="position-relative mb-3">
+                        <form role="search" class="position-relative" id="search-form">
+                            <button class="position-absolute top-50 start-0 translate-middle-y btn" aria-label="search">
+                                <i class="fas fa-magnifying-glass"></i>
+                            </button>
+                            <input type="search" class="form-control ps-5" placeholder="Search" aria-label="search field" id="search-input">
+                        </form>
+                        <div class="position-absolute bg-white border border-top-0 border-dark-subtle w-100 collapse p-2 z-3" id="search-results">
+                            <span>Posts</span>
+                            <ul class="list-group" id="post-list"></ul> 
+                            <span>Profiles</span>
+                            <ul class="list-group" id="profile-list"></ul>
+                        </div>
+                    </div>    
                     <div class="collapse" id="collapseOne">
-                        <form class="col d-flex align-items-stretch rounded-pill mb-3">
-                            <div class="user-icon-lg position-absolute"></div>
-                            <textarea class="form-control rounded-start-pill ps-6" style="height: 96px;" placeholder="What on your mind?" aria-label="create a post"></textarea>
-                            <div class="d-grid">
-                                <button class="btn btn-primary rounded-end-pill">Post</button>
+                        <form class="col align-items-stretch mb-3 p-3 bg-white" id="post-form">
+                            <div class="mb-3 d-flex align-items-center gap-2">
+                                <img class="user-icon user-profile">
+                                <input class="form-control" placeholder="Title" name="title" aria-label="create a post" id="title-input" required></input>
                             </div>
+                            <div class="mb-3">
+                                <textarea class="form-control" name="body" rows="10" id="body-input"></textarea>
+                            </div>
+                            <div class="mb-3">
+                                <button type="button" class="btn" id="media-toggle">
+                                    <i class="fas fa-image" id="media-image"></i>
+                                    <i class="fas fa-x d-none" id="media-close"></i>
+                                </button>
+                                <div class="add-media d-none">
+                                    <label for="media-url-input">Media url</label>
+                                    <input type="url" name="url" class="form-control" id="media-url-input">
+                                    <div class="text-center">
+                                        <img class="img-fluid" id="placeholder-image">
+                                    </div>
+                                    <label for="media-alt-input">Alt text</label>
+                                    <input type="text" name="alt" class="form-control" id="media-alt-input">
+                                </div>
+                            </div>
+                            <div class="mb-3">
+                                <label for="tags-input" class="form-label">Tags</label>
+                                <input type="text" id="tags-input">
+                                <button type="button" class="btn btn-secondary" id="add-tag">add</button>
+                                <div class="d-flex flex-wrap gap-2" id="added-tags"></div>
+                            </div>
+                            <div class="d-grid mb-3">
+                                <button class="btn btn-primary">Post</button>
+                            </div>
+                            <div id="post-error" class="invalid-feedback">Something went wrong!</div>
                         </form>
                     </div>
-                    <div class="mb-3">
-                        <div class="container bg-white p-3 mb-3">
-                            <div class="border-bottom">
-                                <div class="d-flex gap-2 align-items-center">
-                                    <div class="user-icon"></div>                                
-                                    <h2>Random User</h2>
-                                </div>
-                                <p class="text-black-50">Posted 2 days ago</p>                       
-                            </div>
-                            <div>
-                                <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
-                            </div>
-                            <div class="bg-primary-subtle">
-                                <button class="btn" aria-label="super like">                                
-                                    <i class="fas fa-heart"></i>
-                                </button>
-                                <button class="btn" aria-label="like">
-                                    <i class="fas fa-face-smile"></i>
-                                </button>
-                                <button class="btn" aria-label="dislike">
-                                    <i class="fas fa-face-frown"></i>
-                                </button>
-                                <button class="btn" data-bs-toggle="collapse" data-bs-target="#collapseComment-1">Reply</button>
-                            </div>
-                            <div class="bg-body p-3">
-                                <div class="d-inline-block border-bottom border-primary mb-3">
-                                    <h3 class="fs-5">Comments</h3>
-                                </div>
-                                <div class="collapse bg-body mb-3" id="collapseComment-1">
-                                    <form class="col d-flex align-items-stretch rounded-pill">
-                                        <div class="user-icon position-absolute"></div>
-                                        <textarea class="form-control rounded-start-pill ps-5" style="height: 48px;" aria-label="post a comment"></textarea>
-                                        <div class="d-grid">
-                                            <button class="btn btn-primary rounded-end-pill">Comment</button>
-                                        </div>
-                                    </form>
-                                </div>
-                                <div class="border-bottom border-primary mb-3">
-                                    <div class="border-bottom">
-                                        <div class="d-flex align-items-center gap-2">
-                                            <div class="user-icon-sm"></div>
-                                            <h4 class="fs-6">Random User</h4>
-                                        </div>
-                                        <p class=" text-black-50">Posted 2 days ago</p>
-                                    </div>
-                                    <div>
-                                        <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Omnis aut, cumque perspiciatis, possimus illum excepturi vitae hic recusandae natus, porro iusto ab veniam id atque praesentium dolores velit. Maiores, quibusdam!</p>
-                                    </div>    
-                                </div>
-                                <div class="border-bottom border-primary mb-3">
-                                    <div class="border-bottom">
-                                        <div class="d-flex align-items-center gap-2">
-                                            <div class="user-icon-sm"></div>
-                                            <h4 class="fs-6">Random User</h4>
-                                        </div>
-                                        <p class="text-black-50">Posted 2 days ago</p>
-                                    </div>
-                                    <div>
-                                        <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Omnis aut, cumque perspiciatis, possimus illum excepturi vitae hic recusandae natus, porro iusto ab veniam id atque praesentium dolores velit. Maiores, quibusdam!</p>
-                                    </div>    
-                                </div>
-                            </div>
-                        </div>
-                        <div class="container bg-white p-3 mb-3">
-                            <div class="border-bottom">
-                                <div class="d-flex gap-2 align-items-center">
-                                    <div class="user-icon"></div>                                
-                                    <h2>Random User</h2>
-                                </div>
-                                <p class="text-black-50">Posted 2 days ago</p>                       
-                            </div>
-                            <div>
-                                <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
-                            </div>
-                            <div class="bg-primary-subtle">
-                                <button class="btn" aria-label="super like">                                
-                                    <i class="fas fa-heart"></i>
-                                </button>
-                                <button class="btn" aria-label="like">
-                                    <i class="fas fa-face-smile"></i>
-                                </button>
-                                <button class="btn" aria-label="dislike">
-                                    <i class="fas fa-face-frown"></i>
-                                </button>
-                                <button class="btn" data-bs-toggle="collapse" data-bs-target="#collapseComment-2">Reply</button>
-                            </div>
-                            <div class="bg-body p-3">
-                                <div class="d-inline-block border-bottom border-primary mb-3">
-                                    <h3 class="fs-5">Comments</h3>
-                                </div>
-                                <div class="collapse bg-body mb-3" id="collapseComment-2">
-                                    <form class="col d-flex align-items-stretch rounded-pill">
-                                        <div class="user-icon position-absolute"></div>
-                                        <textarea class="form-control rounded-start-pill ps-5" style="height: 48px;" aria-label="post a comment"></textarea>
-                                        <div class="d-grid">
-                                            <button class="btn btn-primary rounded-end-pill">Comment</button>
-                                        </div>
-                                    </form>
-                                </div>
-                                <div class="border-bottom border-primary mb-3">
-                                    <div class="border-bottom">
-                                        <div class="d-flex align-items-center gap-2">
-                                            <div class="user-icon-sm"></div>
-                                            <h4 class="fs-6">Random User</h4>
-                                        </div>
-                                        <p class=" text-black-50">Posted 2 days ago</p>
-                                    </div>
-                                    <div>
-                                        <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Omnis aut, cumque perspiciatis, possimus illum excepturi vitae hic recusandae natus, porro iusto ab veniam id atque praesentium dolores velit. Maiores, quibusdam!</p>
-                                    </div>    
-                                </div>
-                                <div class="border-bottom border-primary mb-3">
-                                    <div class="border-bottom">
-                                        <div class="d-flex align-items-center gap-2">
-                                            <div class="user-icon-sm"></div>
-                                            <h4 class="fs-6">Random User</h4>
-                                        </div>
-                                        <p class="text-black-50">Posted 2 days ago</p>
-                                    </div>
-                                    <div>
-                                        <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Omnis aut, cumque perspiciatis, possimus illum excepturi vitae hic recusandae natus, porro iusto ab veniam id atque praesentium dolores velit. Maiores, quibusdam!</p>
-                                    </div>    
-                                </div>
-                            </div>
-                        </div>
-                        <div class="container bg-white p-3 mb-3">
-                            <div class="border-bottom">
-                                <div class="d-flex gap-2 align-items-center">
-                                    <div class="user-icon"></div>                                
-                                    <h2>Random User</h2>
-                                </div>
-                                <p class="text-black-50">Posted 2 days ago</p>                       
-                            </div>
-                            <div>
-                                <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
-                            </div>
-                            <div class="bg-primary-subtle">
-                                <button class="btn" aria-label="super like">                                
-                                    <i class="fas fa-heart"></i>
-                                </button>
-                                <button class="btn" aria-label="like">
-                                    <i class="fas fa-face-smile"></i>
-                                </button>
-                                <button class="btn" aria-label="dislike">
-                                    <i class="fas fa-face-frown"></i>
-                                </button>
-                                <button class="btn" data-bs-toggle="collapse" data-bs-target="#collapseComment-3">Reply</button>
-                            </div>
-                            <div class="bg-body p-3">
-                                <div class="d-inline-block border-bottom border-primary mb-3">
-                                    <h3 class="fs-5">Comments</h3>
-                                </div>
-                                <div class="collapse bg-body mb-3" id="collapseComment-3">
-                                    <form class="col d-flex align-items-stretch rounded-pill">
-                                        <div class="user-icon position-absolute"></div>
-                                        <textarea class="form-control rounded-start-pill ps-5" style="height: 48px;" aria-label="post a comment"></textarea>
-                                        <div class="d-grid">
-                                            <button class="btn btn-primary rounded-end-pill">Comment</button>
-                                        </div>
-                                    </form>
-                                </div>
-                                <div class="border-bottom border-primary mb-3">
-                                    <div class="border-bottom">
-                                        <div class="d-flex align-items-center gap-2">
-                                            <div class="user-icon-sm"></div>
-                                            <h4 class="fs-6">Random User</h4>
-                                        </div>
-                                        <p class=" text-black-50">Posted 2 days ago</p>
-                                    </div>
-                                    <div>
-                                        <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Omnis aut, cumque perspiciatis, possimus illum excepturi vitae hic recusandae natus, porro iusto ab veniam id atque praesentium dolores velit. Maiores, quibusdam!</p>
-                                    </div>    
-                                </div>
-                                <div class="border-bottom border-primary mb-3">
-                                    <div class="border-bottom">
-                                        <div class="d-flex align-items-center gap-2">
-                                            <div class="user-icon-sm"></div>
-                                            <h4 class="fs-6">Random User</h4>
-                                        </div>
-                                        <p class="text-black-50">Posted 2 days ago</p>
-                                    </div>
-                                    <div>
-                                        <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Omnis aut, cumque perspiciatis, possimus illum excepturi vitae hic recusandae natus, porro iusto ab veniam id atque praesentium dolores velit. Maiores, quibusdam!</p>
-                                    </div>    
-                                </div>
-                            </div>
-                        </div>
+                    <div class="mb-3" id="feed"></div>
+                    <div class="spinner-border d-none" id="loading-spinner" role="status">
+                        <span class="visually-hidden">Loading...</span>
                     </div>
-                </div>
+                    <div class="alert alert-danger d-none" id="display-error" role="alert">
+                        Oops! Something went wrong. Please refresh the page and try again.
+                    </div>    
             </div>
         </div>
+        <div id="myModal" class="modal fade" tabindex="-1">
+            <div class="modal-dialog">
+              <div class="modal-content">
+                <form class="col align-items-stretch mb-3 p-3 bg-white" id="edit-form">
+                    <div class="mb-3 d-flex align-items-center gap-2">
+                        <img class="user-icon user-profile">
+                        <input class="form-control" placeholder="Title" name="title" aria-label="create a post" id="edit-title-input" required></input>
+                        <button type="button" class="btn-close" id="close-postform" aria-label="close"></button>
+                    </div>
+                    <div class="mb-3">
+                        <textarea class="form-control" name="body" rows="10" id="edit-body-input"></textarea>
+                    </div>
+                    <div class="mb-3">
+                        <label for="media-url-input">Media url</label>
+                        <input type="url" name="url" class="form-control" id="edit-media-url-input">
+                        <div class="text-center">
+                            <img class="img-fluid" id="edit-placeholder-image">
+                        </div>
+                        <label for="media-alt-input">Alt text</label>
+                        <input type="text" name="alt" class="form-control" id="edit-media-alt-input">
+                    </div>
+                    <div class="mb-3">
+                        <label for="tags-input" class="form-label">Tags</label>
+                        <input type="text" id="edit-tags-input">
+                        <button type="button" class="btn btn-secondary" id="edit-add-tag">add</button>
+                        <div class="d-flex flex-wrap gap-2" id="edit-added-tags"></div>
+                    </div>
+                    <div class="d-grid mb-3">
+                        <button class="btn btn-primary">Edit</button>
+                    </div>
+                </form>
+                <div id="auth-error" class="invalid-feedback">Something went wrong!</div>
+              </div>
+            </div>
+          </div>
         <div class="modal fade" id="followersModal">
             <div class="modal-dialog modal-dialog-centered">
-                <div class="modal-content">
+                <div class="modal-content followers">
                     <div class="modal-header">
                        <h2 class="modal-title">Followers</h2>
-                       <p>40</p>
+                       <p class="amount">40</p>
                        <button class="btn-close" data-bs-dismiss="modal" aria-label="close"></button>
                     </div>
-                    <div class="modal-body d-flex flex-wrap gap-3">
-                        <div class="d-flex flex-column align-items-center">
-                            <div class="user-icon"></div>
-                            <h3 class="text-nowrap">User name</h3>
-                        </div>
-                        <div class="d-flex flex-column align-items-center">
-                            <div class="user-icon"></div>
-                            <h3 class="text-nowrap">User name</h3>
-                        </div>
-                        <div class="d-flex flex-column align-items-center">
-                            <div class="user-icon"></div>
-                            <h3 class="text-nowrap">User name</h3>
-                        </div>
-                        <div class="d-flex flex-column align-items-center">
-                            <div class="user-icon"></div>
-                            <h3 class="text-nowrap">User name</h3>
-                        </div>
-                        <div class="d-flex flex-column align-items-center">
-                            <div class="user-icon"></div>
-                            <h3 class="text-nowrap">User name</h3>
-                        </div>
-                        <div class="d-flex flex-column align-items-center">
-                            <div class="user-icon"></div>
-                            <h3 class="text-nowrap">User name</h3>
-                        </div>
-                    </div>
+                    <div class="modal-body"></div>
                 </div>
             </div>
         </div>
         <div class="modal fade" id="followingModal">
             <div class="modal-dialog modal-dialog-centered">
-                <div class="modal-content">
+                <div class="modal-content following">
                     <div class="modal-header">
                        <h2 class="modal-title">Following</h2>
-                       <p>300</p>
+                       <p class="amount">300</p>
                        <button class="btn-close" data-bs-dismiss="modal" aria-label="close"></button>
                     </div>
-                    <div class="modal-body d-flex flex-wrap gap-3">
-                        <div class="d-flex flex-column align-items-center">
-                            <div class="user-icon"></div>
-                            <h3 class="text-nowrap">User name</h3>
+                    <div class="modal-body"></div>
+                </div>
+            </div>
+        </div>
+        <div class="modal fade" id="edit-modal">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h2 class="m-0">Edit Profile</h2>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" data-bs-target="#edit-modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="d-flex flex-column align-items-center p-3 mb-3 test-bg">
+                            <div class="position-relative">
+                                <img src="../images/logo.png" class="user-icon-xl">
+                            </div>
+                            <p class="fs-1">User Name</p>
                         </div>
-                        <div class="d-flex flex-column align-items-center">
-                            <div class="user-icon"></div>
-                            <h3 class="text-nowrap">User name</h3>
-                        </div>
-                        <div class="d-flex flex-column align-items-center">
-                            <div class="user-icon"></div>
-                            <h3 class="text-nowrap">User name</h3>
-                        </div>
-                        <div class="d-flex flex-column align-items-center">
-                            <div class="user-icon"></div>
-                            <h3 class="text-nowrap">User name</h3>
-                        </div>
-                        <div class="d-flex flex-column align-items-center">
-                            <div class="user-icon"></div>
-                            <h3 class="text-nowrap">User name</h3>
-                        </div>
-                        <div class="d-flex flex-column align-items-center">
-                            <div class="user-icon"></div>
-                            <h3 class="text-nowrap">User name</h3>
-                        </div>
+                        <form id="edit-profile-form">
+                            <div>  
+                                <h3 class="fs-5">Avatar</h3>
+                                <div class="mb-3 row">
+                                    <label for="avatar-url" class="col-auto col-form-label">Url</label>
+                                    <div class="col">
+                                        <input type="url" class="form-control" id="avatar-url">
+                                    </div>
+                                </div>
+                                <div class="mb-3 row">
+                                    <label for="avatar-alt" class="col-auto col-form-label">Alt</label>
+                                    <div class="col">
+                                        <input type="text" class="form-control" id="avatar-alt">
+                                    </div>
+                                </div>
+                            </div>
+                            <div>
+                                <h3 class="fs-5">Banner</h3>
+                                <div class="mb-3 row">
+                                    <label for="banner-url" class="col-auto col-form-label">Url</label>
+                                    <div class="col">
+                                        <input type="url" class="form-control" id="banner-url">
+                                    </div>
+                                </div>
+                                <div class="mb-3 row">
+                                    <label for="banner-alt" class="col-auto col-form-label">Alt</label>
+                                    <div class="col">
+                                        <input type="text" class="form-control" id="banner-alt">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="d-grid mb-3">
+                                <button class="btn btn-primary">Save</button>
+                            </div>      
+                        </form>
                     </div>
                 </div>
             </div>
         </div>
     </main>
-    <script src="../node_modules/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="../js/bootstrap.bundle.min.js"></script>
+    <script type="module" src="../js/index.js"></script>
 </body>
 </html>
