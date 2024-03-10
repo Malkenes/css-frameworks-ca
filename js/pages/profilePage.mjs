@@ -1,5 +1,5 @@
 import { putApiData, apiCall } from "../services/apiServices.mjs";
-import { displayError, hideLoadingSpinner, showLoadingSpinner } from "../utils/feedbackUtils.mjs";
+import { displayError, displayNoPosts, hideLoadingSpinner, showLoadingSpinner } from "../utils/feedbackUtils.mjs";
 import { displayFeed } from "./feed.mjs";
 
 export async function getProfile(param) {
@@ -8,7 +8,11 @@ export async function getProfile(param) {
         const userProfile = await apiCall("/social/profiles/" + param + "?_following=true&_followers=true");
         displayProfile(userProfile);
         const apiData = await apiCall(`/social/profiles/${param}/posts` +"?_author=true&_reactions=true&_comments=true");
-        displayFeed(apiData.data);
+        if (apiData.data.length === 0) {
+            displayNoPosts(`${param} has 0 posts`);
+        } else {
+            displayFeed(apiData.data);
+        }
         hideLoadingSpinner();
     } catch (error) {
         console.log(error);

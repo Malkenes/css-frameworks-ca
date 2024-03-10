@@ -1,8 +1,9 @@
 import { commentSection } from "../components/commentSection.mjs";
+import { handlePostInteraction } from "../components/postHandler.mjs";
 import { displayPost } from "../components/postList.mjs";
 import { sortByPopularity, sortByTrending, getTagCount } from "../components/sort.mjs";
 import { apiCall } from "../services/apiServices.mjs";
-import { showLoadingSpinner, hideLoadingSpinner, displayError } from "../utils/feedbackUtils.mjs";
+import { showLoadingSpinner, hideLoadingSpinner, displayError, displayNoPosts } from "../utils/feedbackUtils.mjs";
 
 /**
  * @description Retrieves and displays the feed of posts, including options for sorting and filtering.
@@ -16,6 +17,15 @@ export async function getFeed() {
         const data = await getAllPosts();
         const originalData = [...data];
         let dataCopy = sortByTrending(data);
+
+        const recent = document.querySelector("#recent");
+        const trending = document.querySelector("#trending");
+        const popular = document.querySelector("#popular");
+
+        if (dataCopy.length === 0) {
+            dataCopy = originalData;
+            setActive(recent);
+        }
     
     
         window.onscroll = function() {
@@ -27,21 +37,21 @@ export async function getFeed() {
             }
         }
     
-        const trending = document.querySelector("#trending");
         trending.addEventListener("click", () => {
             dataCopy = sortByTrending(data);
             clearFeed();
+            if (dataCopy.length === 0) {
+                displayNoPosts("No new posts the last 24 hours");
+            }
             displayFeed(dataCopy.slice(0,10));
             setActive(trending);
         })
-        const recent = document.querySelector("#recent");
         recent.addEventListener("click", () => {
             dataCopy = originalData;
             clearFeed();
             displayFeed(dataCopy.slice(0,10));
             setActive(recent);
         })
-        const popular = document.querySelector("#popular");
         popular.addEventListener("click", () => {
             dataCopy = sortByPopularity(data);
             clearFeed();
@@ -117,6 +127,11 @@ export function displayFeed(data) {
             bodyShowMore.style.display = "block";
         }
     });
+    const postTest = feed.querySelectorAll("[data-id]");
+    postTest.forEach(post => {
+        post.addEventListener("click", handlePostInteraction);
+    });            
+
 } 
 
 /**

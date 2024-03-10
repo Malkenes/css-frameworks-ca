@@ -2,45 +2,38 @@ import { initializeFormValidation } from "./services/authService.mjs"
 import { apiCall} from "./services/apiServices.mjs";
 import { getFeed } from "./pages/feed.mjs";
 import { getProfile } from "./pages/profilePage.mjs";
-import { displayLiveSearch, executeSearch} from "./components/search.mjs";
+import { initializeSearch} from "./components/search.mjs";
 import { displaySinglePost } from "./pages/post.mjs";
 import { displaySearchResults } from "./pages/search.mjs";
 import { createNewPost, editPost, addMedia, addTag, editTag, handlePostInteraction } from "./components/postHandler.mjs";
 
 
 if (localStorage["accessToken"]) {
-    const apiName = await apiCall("/social/profiles/" + localStorage["name"]);
-    const user = document.querySelectorAll(".user-profile");
-    Array.from(user).forEach(img => {
-        img.src = apiName.data.avatar.url;
-        img.alt = apiName.data.avatar.alt;
-    })
-    const userLink = document.querySelectorAll(".user-profile-link");
-    Array.from(userLink).forEach(link => {
-        link.href = "../profile/index.html?user=" + localStorage["name"];
-    })
+    updateLoggedInUserUI();
     const queryString = document.location.search;
     const params = new URLSearchParams(queryString);
     const userParam = params.get("user");
     const postParam = params.get("id");
     const searchParam = params.get("search");
-    if (userParam) {
-        getProfile(userParam);
-    }
     if (searchParam) {
         displaySearchResults(searchParam);
+    }
+    if (postParam) {
+        displaySinglePost(postParam);    
     }
     const feed = document.querySelector("#feed");
     if (feed) {
         if (userParam) {
-            //const apiData = await apiCall(`/social/profiles/${userParam}/posts` +"?_author=true&_reactions=true&_comments=true");
-            //displayFeed(apiData.data);
-        } else if (postParam) {
-            displaySinglePost(postParam);    
+            getProfile(userParam);
         } else {
             getFeed();
         }
-        feed.addEventListener("click", handlePostInteraction)        
+    }
+} else {
+    const desiredPagePath = "/index.html";
+    const desiredPageURL = window.location.origin + desiredPagePath;
+    if (window.location.href !== desiredPageURL) {
+        window.location.href = desiredPageURL;
     }
 }
 
@@ -74,13 +67,13 @@ if (postForm) {
 
 
 
-
+const editTags = document.querySelector("#edit-add-tag");
+if (editTags) {
+    editTags.addEventListener("click" , editTag);
+}
 const addTags = document.querySelector("#add-tag");
 if (addTags) {
     addTags.addEventListener("click" , addTag);
-
-    const editTags = document.querySelector("#edit-add-tag");
-    editTags.addEventListener("click" , editTag);
 
     const mediaToggle = document.querySelector("#media-toggle");
     mediaToggle.addEventListener("click", addMedia);
@@ -99,13 +92,24 @@ if (logoutBtn) {
         window.location.href = "../index.html";
     })
 }
-const searchResultContainer = document.querySelector("#search-results");
-if (searchResultContainer) {
-    displayLiveSearch();
+initializeSearch();
+/**
+ * @description Updates the UI elements for the logged-in user based on their profile data.
+ * @returns {Promise<void>}
+ */
+async function updateLoggedInUserUI() {
+    try {
+        const apiName = await apiCall("/social/profiles/" + localStorage["name"]);
+        const user = document.querySelectorAll(".user-profile");
+        Array.from(user).forEach(img => {
+            img.src = apiName.data.avatar.url;
+            img.alt = apiName.data.avatar.alt;
+        })
+        const userLink = document.querySelectorAll(".user-profile-link");
+        Array.from(userLink).forEach(link => {
+            link.href = "/profile/index.html?user=" + localStorage["name"];
+        })    
+    } catch (error) {
+        console.log(error);
+    }
 }
-
-const searchForm = document.querySelector("#search-form");
-if (searchForm) {
-    searchForm.addEventListener("submit", executeSearch)
-}
-

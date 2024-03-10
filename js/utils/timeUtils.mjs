@@ -9,24 +9,28 @@ export function timePassed(created) {
     div.classList.add("text-black-50");
     const date = Date.parse(created);
     const timeElapsed = Date.now() - date;
+    const weeks = Math.floor(timeElapsed / (1000 * 60 * 60 * 24 * 7));
     const days = Math.floor(timeElapsed / (1000 * 60 * 60 * 24));
-    div.textContent = `Posted ${days} days ago`;
+    const hours = Math.floor(timeElapsed / (1000 * 60 * 60));
+    const minutes = Math.floor(timeElapsed / (1000 * 60));
     let time = "";
     switch (true) {
-        case timeElapsed > 1000 * 60 * 60 * 24 * 7:
-            time = Math.floor(timeElapsed / (1000 * 60 * 60 * 24 * 7)) + " weeks";
+        case weeks > 0:
+            time = weeks === 1 ? "1 week ago" : `${weeks} weeks ago`;
             break;
-        case timeElapsed > 1000 * 60 * 60 * 24:
-            time = Math.floor(timeElapsed / (1000 * 60 * 60 * 24)) + " days";
+        case days > 0:
+            time = days === 1 ? "1 day ago" : `${days} days ago`;
             break;
-        case timeElapsed > 1000 * 60 * 60:
-            time = Math.floor(timeElapsed / (1000 * 60 * 60)) + " hours";
+        case hours > 0:
+            time = hours === 1 ? "1 hour ago" : `${hours} hours ago`;
             break;
-        case timeElapsed > 1000 * 60:
-            time = Math.floor(timeElapsed / (1000 * 60)) + " minutes";
+        case minutes > 0:
+            time = minutes === 1 ? "1 minute ago" : `${minutes} minutes ago`;
+            break;
         default:
+            time = "now"
             break;
     }
-    div.textContent = `Posted ${time} ago`;
+    div.textContent = `Posted ${time}`;
     return div;
 }

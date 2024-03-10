@@ -7,33 +7,27 @@ import { updateReactions, updateComments } from "./commentSection.mjs";
  */
 export async function createNewPost(event) {
     event.preventDefault();
-    const dataPackage = {}
-    const title = document.querySelector("#title-input").value;
-    const body = document.querySelector("#body-input").value;
-    const mediaUrl = document.querySelector("#media-url-input").value;
-    const mediaAlt = document.querySelector("#media-alt-input").value;
-    const tags = document.querySelector("#added-tags");
-    const currentTags = tags.querySelectorAll("span");
-    const tagsByName = Array.from(currentTags).map((currentTag) => {
-        return currentTag.textContent;
-    })
+    const postForm = document.querySelector("#post-form");
+    const formData = new FormData(postForm);
+    const { title, body, url, alt } = Object.fromEntries(formData.entries());
+    const dataPackage = {};
     if (title) {
         dataPackage.title = title;
     }
     if (body) {
         dataPackage.body = body;
     }
-    if (mediaUrl) {
+    if (url) {
         dataPackage.media = {};
-        dataPackage.media.url = mediaUrl;
-        if (mediaAlt) {
-            dataPackage.media.alt = mediaAlt;
-        }    
+        dataPackage.media.url = url;
+        dataPackage.media.alt = alt;
     }
-    if (tagsByName) {
-        dataPackage.tags = tagsByName;
+    const tags = document.querySelector("#added-tags");
+    const currentTags = Array.from(tags.querySelectorAll("span")).map(currentTag => currentTag.textContent);
+    if (currentTags.length > 0) {
+        dataPackage.tags = currentTags;
     }
-
+    
     try {
         const response = await postApiData("/social/posts", dataPackage);
         if (response) {
@@ -49,7 +43,6 @@ export async function createNewPost(event) {
     } catch (error) {
         console.log(error);
     }
-    //postForm.reset();
 }
 
 /**
@@ -64,8 +57,10 @@ export async function openPostEditor(id) {
     document.querySelector("#myModal").dataset.id = data.id;
     document.querySelector("#edit-title-input").value = data.title;
     document.querySelector("#edit-body-input").value = data.body;
-    document.querySelector("#edit-media-url-input").value = data.media.url;
-    document.querySelector("#edit-media-alt-input").value = data.media.alt;
+    if (data.media) {
+        document.querySelector("#edit-media-url-input").value = data.media.url;
+        document.querySelector("#edit-media-alt-input").value = data.media.alt;    
+    }
     const addedTags = document.querySelector("#edit-added-tags");
     const currentTags = addedTags.querySelectorAll("span");
     const tagsByName = Array.from(currentTags).map((currentTag) => {
@@ -73,15 +68,8 @@ export async function openPostEditor(id) {
     })
 
     data.tags.forEach(tag => {
-        if (!dublicateTag(tagsByName, tag)) {
-            const tagElement = document.createElement("span");
-            tagElement.classList.add("p-1", "bg-secondary-subtle", "tag")
-            tagElement.textContent = tag;
-            tagElement.onclick = function() {
-                tagElement.remove();
-            }    
-            addedTags.append(tagElement);
-        }
+        const tagElement = displayTag(tag);
+        addedTags.append(tagElement);
     })
     myModal.toggle();
 
@@ -94,34 +82,35 @@ export async function openPostEditor(id) {
  */
 export async function editPost(event) {
     event.preventDefault();
+    const postForm = document.querySelector("#edit-form");
+    const formData = new FormData(postForm);
+    const { title, body, url, alt } = Object.fromEntries(formData.entries());
     const dataPackage = {}
-
-    const postId = document.querySelector("#myModal").dataset.id;
-    const title = document.querySelector("#edit-title-input").value;
-    const body = document.querySelector("#edit-body-input").value;
-    const mediaUrl = document.querySelector("#edit-media-url-input").value;
-    const mediaAlt = document.querySelector("#edit-media-alt-input").value;
-    const tags = document.querySelector("#edit-added-tags");
-    const currentTags = tags.querySelectorAll("span");
-    const tagsByName = Array.from(currentTags).map((currentTag) => {
-        return currentTag.textContent;
-    })
     if (title) {
         dataPackage.title = title;
     }
     if (body) {
         dataPackage.body = body;
+    } else {
+        dataPackage.body = "";
     }
-    if (mediaUrl) {
-        dataPackage.media = {}
-        dataPackage.media.url = mediaUrl;
-        if (mediaAlt) {
-            dataPackage.media.alt = mediaAlt;
-        }    
+    if (url) {
+        dataPackage.media = {};
+        dataPackage.media.url = url;
+        dataPackage.media.alt = alt;
+    } else {
+        // does not work, can not remove media in edit mode
+        dataPackage.media = null;
     }
-    if (tagsByName) {
-        dataPackage.tags = tagsByName;
+    const tags = document.querySelector("#edit-added-tags");
+    const currentTags = Array.from(tags.querySelectorAll("span")).map(currentTag => currentTag.textContent);
+    if (currentTags.length > 0) {
+        dataPackage.tags = currentTags;
+    } else {
+        dataPackage.tags = [];
     }
+
+    const postId = document.querySelector("#myModal").dataset.id;
     try {
         const response = await putApiData(`/social/posts/${postId}`, dataPackage);
         if (response) {
@@ -169,12 +158,7 @@ export function addTag() {
         return currentTag.textContent;
     })
     if (tag !== "" && !dublicateTag(tagsByName,tag)) {
-        const tagElement = document.createElement("span");
-        tagElement.classList.add("p-1", "bg-secondary-subtle", "tag")
-        tagElement.textContent = tag;
-        tagElement.onclick = function() {
-            tagElement.remove();
-        }
+        const tagElement = displayTag(tag);
         addedTags.append(tagElement);
     }
     tagInput.value = "";
@@ -193,17 +177,23 @@ export function editTag() {
         return currentTag.textContent;
     })
     if (tag !== "" && !dublicateTag(tagsByName,tag)) {
-        const tagElement = document.createElement("span");
-        tagElement.classList.add("p-1", "bg-secondary-subtle", "tag")
-        tagElement.textContent = tag;
-        tagElement.onclick = function() {
-            tagElement.remove();
-        }
+        const tagElement = displayTag(tag);
         addedTags.append(tagElement);
     }
     tagInput.value = "";
 }
-
+function displayTag(content) {
+    const tagElement = document.createElement("span");
+    tagElement.classList.add("p-1", "bg-secondary-subtle", "tag");
+    tagElement.textContent = content;
+    const removeTagButton = document.createElement("button");
+    removeTagButton.classList.add("btn", "btn-close", "btn-sm");
+    tagElement.append(removeTagButton);
+    removeTagButton.onclick = function() {
+        tagElement.remove();
+    }
+    return tagElement;
+}
 /**
  * @description Check if a tag already exists in a given array of tags.
  * @param {Array} tags

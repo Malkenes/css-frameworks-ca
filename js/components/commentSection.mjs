@@ -71,21 +71,23 @@ function createComments(comments) {
     Array.from(comments).reverse().forEach(comment => {
         const com = document.createElement("div");
         com.dataset.commentId = comment.id;
-        com.innerHTML = `
+        const commentHeader = document.createElement("div");
+        commentHeader.innerHTML = `
         <div class="d-flex gap-2 align-items-center">
             <img src="${comment.author.avatar.url}" class="user-icon-sm" alt="${comment.author.avatar.alt}">
             <h2 class="fs-5">${comment.author.name}</h2>
         </div>`;
         const time = timePassed(comment.created);
-        com.append(time);
-        const body = document.createElement("div");
+        const body = document.createElement("p");
         body.textContent = comment.body;
         if (comment.author.name === localStorage["name"]) {
             const deleteBtn = document.createElement("button");
-            deleteBtn.classList.add("btn", "btn-danger", "btn-sm", "delete-comment-btn");
+            deleteBtn.classList.add("btn", "btn-danger", "btn-sm", "delete-comment-btn", "float-end");
             deleteBtn.textContent = "delete";
             com.append(deleteBtn);
         }
+        com.append(commentHeader);
+        com.append(time);
         com.append(body);
         div.append(com);
     });

@@ -30,7 +30,7 @@
     <main>
         <div class="container mb-5">
             <div class="col-lg-6 offset-lg-3">
-                <div id="feed"></div>
+                <div id="post"></div>
                 <div class="spinner-border d-none" id="loading-spinner" role="status">
                     <span class="visually-hidden">Loading...</span>
                 </div>
@@ -45,20 +45,20 @@
                 <form class="col align-items-stretch mb-3 p-3 bg-white" id="edit-form">
                     <div class="mb-3 d-flex align-items-center gap-2">
                         <img class="user-icon user-profile">
-                        <input class="form-control" placeholder="Title" aria-label="create a post" id="edit-title-input" required></input>
+                        <input class="form-control" placeholder="Title" name="title" aria-label="create a post" id="edit-title-input" required></input>
                         <button type="button" class="btn-close" id="close-postform" aria-label="close"></button>
                     </div>
                     <div class="mb-3">
-                        <textarea class="form-control" rows="10" id="edit-body-input"></textarea>
+                        <textarea class="form-control" name="body" rows="10" id="edit-body-input"></textarea>
                     </div>
                     <div class="mb-3">
                         <label for="media-url-input">Media url</label>
-                        <input type="url" class="form-control" id="edit-media-url-input">
+                        <input type="url" name="url" class="form-control" id="edit-media-url-input">
                         <div class="text-center">
                             <img class="img-fluid" id="edit-placeholder-image">
                         </div>
                         <label for="media-alt-input">Alt text</label>
-                        <input type="text" class="form-control" id="edit-media-alt-input">
+                        <input type="text" name="alt" class="form-control" id="edit-media-alt-input">
                     </div>
                     <div class="mb-3">
                         <label for="tags-input" class="form-label">Tags</label>

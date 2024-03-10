@@ -15,7 +15,7 @@
     <header>
         <nav class="navbar container">
             <div class="container-fluid">
-                <a class="navbar-brand" href="#">
+                <a class="navbar-brand" href="">
                     <img src="../images/logo.png" style="width: 48px;" alt="FriendLink">
                 </a>
                 <div>
@@ -32,28 +32,8 @@
         <div class="container">
             <div class="row">
                 <div class="offcanvas-lg offcanvas-start custom-offcanvas col-lg-3 col-xxl-2" id="offcanvasResponsive">
-                    <h2 class="text-center bg-primary list-group-item mt-2 fs-3">Filters</h2>
-                    <ul class="list-group">
-                        <li class="list-group-item list-group-item-action">
-                            <button class="btn">
-                                <i class="fas fa-t"></i>
-                                Text Content</button>
-                        </li>
-                        <li class="list-group-item list-group-item-action list-group-item-primary">
-                            <button class="btn">
-                                <i class="fas fa-image"></i> Image Content
-                            </button>
-                        </li>
-                        <li class="list-group-item list-group-item-action">
-                            <button class="btn">
-                                <i class="fas fa-video"></i>
-                                Video Content
-                            </button>
-                        </li>
-                    </ul>
-                    <h2 class="text-center bg-primary list-group-item mt-2 fs-3">Popular Tags</h2>
                     <ul class="list-group" id="tag-selection">
-
+                        <h2 class="text-center bg-primary list-group-item fs-4 m-0">Popular Tags</h2>
                     </ul>
                 </div>
                 <div class="col-lg-9 col-xl-6 offset-xl-1">
@@ -66,25 +46,25 @@
                         </form>
                         <div class="position-absolute bg-white border border-top-0 border-dark-subtle w-100 collapse p-2 z-3" id="search-results">
                             <span>Posts</span>
-                            <ul id="post-list"></ul> 
+                            <ul class="list-group" id="post-list"></ul> 
                             <span>Profiles</span>
-                            <ul id="profile-list"></ul>
+                            <ul class="list-group" id="profile-list"></ul>
                         </div>
                     </div>    
                     <div class="d-grid">
                         <button class="mb-3 bg-white rounded-start-pill d-flex p-0 border border-0 align-items-center" id="create-post">
                             <img class="user-icon-lg user-profile">
-                            <span>Whats on your mind?</span>
+                            <span class="ps-2">Whats on your mind?</span>
                         </button>
                         <div>
                             <form class="col align-items-stretch mb-3 p-3 bg-white d-none" id="post-form">
                                 <div class="mb-3 d-flex align-items-center gap-2">
                                     <img class="user-icon user-profile">
-                                    <input class="form-control" placeholder="Title" aria-label="create a post" id="title-input" required></input>
+                                    <input class="form-control" placeholder="Title" name="title" aria-label="create a post" id="title-input" required></input>
                                     <button type="button" class="btn-close" id="close-postform" aria-label="close"></button>
                                 </div>
                                 <div class="mb-3">
-                                    <textarea class="form-control" rows="10" id="body-input"></textarea>
+                                    <textarea class="form-control" name="body" rows="10" id="body-input"></textarea>
                                 </div>
                                 <div class="mb-3">
                                     <button type="button" class="btn" id="media-toggle">
@@ -93,12 +73,12 @@
                                     </button>
                                     <div class="add-media d-none">
                                         <label for="media-url-input">Media url</label>
-                                        <input type="url" class="form-control" id="media-url-input">
+                                        <input type="url" name="url" class="form-control" id="media-url-input">
                                         <div class="text-center">
                                             <img class="img-fluid" id="placeholder-image">
                                         </div>
                                         <label for="media-alt-input">Alt text</label>
-                                        <input type="text" class="form-control" id="media-alt-input">
+                                        <input type="text" name="alt" class="form-control" id="media-alt-input">
                                     </div>
                                 </div>
                                 <div class="mb-3">
@@ -143,20 +123,20 @@
                 <form class="col align-items-stretch mb-3 p-3 bg-white" id="edit-form">
                     <div class="mb-3 d-flex align-items-center gap-2">
                         <img class="user-icon user-profile">
-                        <input class="form-control" placeholder="Title" aria-label="create a post" id="edit-title-input" required></input>
+                        <input class="form-control" placeholder="Title" name="title" aria-label="create a post" id="edit-title-input" required></input>
                         <button type="button" class="btn-close" id="close-postform" aria-label="close"></button>
                     </div>
                     <div class="mb-3">
-                        <textarea class="form-control" rows="10" id="edit-body-input"></textarea>
+                        <textarea class="form-control" name="body" rows="10" id="edit-body-input"></textarea>
                     </div>
                     <div class="mb-3">
                         <label for="media-url-input">Media url</label>
-                        <input type="url" class="form-control" id="edit-media-url-input">
+                        <input type="url" name="url" class="form-control" id="edit-media-url-input">
                         <div class="text-center">
                             <img class="img-fluid" id="edit-placeholder-image">
                         </div>
                         <label for="media-alt-input">Alt text</label>
-                        <input type="text" class="form-control" id="edit-media-alt-input">
+                        <input type="text" name="alt" class="form-control" id="edit-media-alt-input">
                     </div>
                     <div class="mb-3">
                         <label for="tags-input" class="form-label">Tags</label>

@@ -32,10 +32,9 @@ function createPostHeader(data) {
     </div>`;
 
     const time = timePassed(data.created);
-    header.append(time);
     if (data.author.name === localStorage["name"]) {
         const div = document.createElement("div");
-        div.classList.add("btn-group");
+        div.classList.add("btn-group", "float-end");
         const editBtn = document.createElement("button");
         const deleteBtn = document.createElement("button");
         editBtn.classList.add("btn", "btn-light", "btn-sm", "edit-btn");
@@ -45,6 +44,7 @@ function createPostHeader(data) {
         div.append(editBtn, deleteBtn);
         header.append(div);
     }
+    header.append(time);
     return header;
 }
 

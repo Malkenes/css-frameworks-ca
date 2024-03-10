@@ -27,6 +27,11 @@
 ## Demo
 
 [live demo](https://strong-sprinkles-75871e.netlify.app/)
+
+## Project Plan
+
+[trello board](https://trello.com/b/NeKrdf8j/development-tasks)
+
 ## Built With
 - Bootstrap
 - SASS

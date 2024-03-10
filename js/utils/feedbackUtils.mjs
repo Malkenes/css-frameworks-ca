@@ -11,3 +11,8 @@ export function displayError() {
     const errorMessage = document.querySelector("#display-error");
     errorMessage.classList.remove("d-none");
 }
+export function displayNoPosts(content) {
+    const feed = document.querySelector("#feed");
+    feed.classList.add("text-center");
+    feed.innerHTML = content;
+}
